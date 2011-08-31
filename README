@@ -1,0 +1,23 @@
+VirtualTrader Beta
+===================
+
+VirtualTrader Beta is the latest modification of VirtualTrader.
+The website will use much cleaner coding, and PHP Classes,
+simplifying in-site operations.
+
+This new system uses the PHP Auth Class I developed, and uses
+custom cookie based sessions, that last 1 month before expiry.
+
+Whilst in development, pages are accessible via the GET Variable,
+"page"
+
+Example : 127.0.0.1/?page=login
+
+This will be changed when in Production via Htaccess to provide
+cleaner URLs
+
+Example : 127.0.0.1/login
+
+Each page requires an $title and $content to be displayed correctly.
+Error / Success messages from the class are displayed if they exist
+on any page.
