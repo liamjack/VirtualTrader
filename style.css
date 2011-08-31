@@ -1,0 +1,87 @@
+* {
+	margin: 0;
+	padding: 0;
+}
+a:active {
+	text-decoration: none; 
+	color : #555;
+}
+a:link {
+	text-decoration: none; 
+	color : #555;
+}
+a:hover {
+	text-decoration: none; 
+	color : #555;
+}
+a:visited {
+	text-decoration: none; 
+	color : #555;
+}
+.box {
+  margin-right: auto;
+  margin-top: 50px;
+  margin-left: auto;
+  width: 700px;
+}
+.logo {
+	width: 425px;
+	height: 62px;
+	background-image: url("images/logo.png");
+  font-size: 45px;
+  color: #dbdbdb;
+}
+body {
+  background-color: #5e5e5e;  
+  font-family: Arial,Helvetica,sans-serif;
+}
+.content {
+	border: 1px solid #333333;
+	padding: 20px;
+	font-size: 16px;
+	margin-top: 20px;
+	background-color: #e4e4e4;
+}
+.content h1 {
+	font-size: 26px;
+	font-weight: bold;
+	color: #0968bf;
+	padding-bottom: 10px;
+}
+.footer {
+  text-align: center;
+  color: #d3d3d3;
+  margin-top: 10px;
+  font-size: 12px;
+}
+.errormsg {
+	color: red;
+	font-weight: bold;
+}
+.successmsg {
+	color: green;
+	font-weight: bold;
+}
+.small {
+	font-size: 12px;
+}
+.reminder {
+	font-weight: normal;
+	color: #CCC;
+	background-color: #900;
+	height: 15px;
+	width: 100%;
+	font-size: 12px;
+	text-align: center;
+	border-top-width: thin;
+	border-right-width: thin;
+	border-bottom-width: thin;
+	border-left-width: thin;
+	border-top-style: solid;
+	border-bottom-style: solid;
+	border-top-color: #333;
+	border-right-color: #333;
+	border-bottom-color: #333;
+	border-left-color: #333;
+	margin-top: 10px;
+}
