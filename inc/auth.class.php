@@ -199,9 +199,9 @@ class auth
 						$message_from = "no-reply@cuonic.tk";
 						$message_subj = "Account activation required !";
 						$message_cont = "Hello $username<br/><br/>";
-						$message_cont .= "You recently registered a new account on Cuonic Auth Test<br/>";
+						$message_cont .= "You recently registered a new account on VirtualTrader<br/>";
 						$message_cont .= "To activate your account please click the following link<br/><br/>";
-						$message_cont .= "<b><a href=\"http://auth.cuonic.tk/?page=activate&username=$username&key=$activekey\">Activate my account</a></b>";
+						$message_cont .= "<b><a href=\"http://virtualtrader.cuonic.tk/?page=activate&username=$username&key=$activekey\">Activate my account</a></b>";
 						$message_head = "From: $message_from" . "\r\n";
 						$message_head .= "MIME-Version: 1.0" . "\r\n";
 						$message_head .= "Content-type: text/html; charset=iso-8859-1" . "\r\n";
@@ -702,9 +702,9 @@ class auth
 					$message_from = "no-reply@cuonic.tk";
 					$message_subj = "Password reset request !";
 					$message_cont = "Hello $username<br/><br/>";
-					$message_cont .= "You recently requested a password reset on Cuonic Auth Test<br/>";
+					$message_cont .= "You recently requested a password reset on VirtualTrader<br/>";
 					$message_cont .= "To proceed with the password reset, please click the following link :<br/><br/>";
-					$message_cont .= "<b><a href=\"http://auth.cuonic.tk/?page=forgot&username=$username&key=$resetkey\">Reset My Password</a></b>";
+					$message_cont .= "<b><a href=\"http://virtualtrader.cuonic.tk/?page=forgot&username=$username&key=$resetkey\">Reset My Password</a></b>";
 					$message_head = "From: $message_from" . "\r\n";
 					$message_head .= "MIME-Version: 1.0" . "\r\n";
 					$message_head .= "Content-type: text/html; charset=iso-8859-1" . "\r\n";
