@@ -63,6 +63,23 @@ switch ($page)
 <div class="reminder">Reminder : This layout is not final and is only used to display site functionality</div>
 <div class="box">
 <div class="logo"></div>
+<?php
+
+if(isset($_COOKIE['auth_session']))
+{
+	if($auth->checksession($_COOKIE['auth_session']))
+	{
+		$session = $auth->sessioninfo($_COOKIE['auth_session']); ?>
+<div class="member">
+	<div class="member-content">Welcome <b><?php echo $session['username']; ?></b><br>
+	<br>
+	My Profile &gt;<br>
+	Logout &gt;
+	</div>
+</div>
+<?php	}
+}
+?>
 <div class="content">
 <h1><?php echo $title; ?></h1>
 <?php 
@@ -71,7 +88,6 @@ if(isset($auth->successmsg)) { echo "<span class=\"successmsg\">"; foreach ($aut
 ?>
 <?php echo $content; ?>
 </div>
-<div class="footer">© Cuonic Inc. 2010 - 2011. All Rights Reserved</div>
 </div>
 </body>
 </html>

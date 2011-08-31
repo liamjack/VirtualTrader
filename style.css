@@ -19,17 +19,20 @@ a:visited {
 	color : #555;
 }
 .box {
-  margin-right: auto;
-  margin-top: 50px;
-  margin-left: auto;
-  width: 700px;
+	margin-right: auto;
+	margin-top: 50px;
+	margin-left: auto;
+	width: 700px;
+	clear: none;
+	float: none;
 }
 .logo {
 	width: 425px;
 	height: 62px;
 	background-image: url("images/logo.png");
-  font-size: 45px;
-  color: #dbdbdb;
+	font-size: 45px;
+	color: #dbdbdb;
+	float: left;
 }
 body {
   background-color: #5e5e5e;  
@@ -41,6 +44,8 @@ body {
 	font-size: 16px;
 	margin-top: 20px;
 	background-color: #e4e4e4;
+	float: left;
+	width: 660px;
 }
 .content h1 {
 	font-size: 26px;
@@ -49,10 +54,10 @@ body {
 	padding-bottom: 10px;
 }
 .footer {
-  text-align: center;
-  color: #d3d3d3;
-  margin-top: 10px;
-  font-size: 12px;
+	text-align: center;
+	color: #d3d3d3;
+	margin-top: 20px;
+	font-size: 12px;
 }
 .errormsg {
 	color: red;
@@ -84,4 +89,25 @@ body {
 	border-bottom-color: #333;
 	border-left-color: #333;
 	margin-top: 10px;
+}
+.member {
+	float: right;
+	height: 62px;
+	width: 200px;
+	background-color: #333;
+	border: thin solid #333;
+	color: #CCC;
+	font-size: 11px;
+	-webkit-border-radius: 10px;
+	-moz-border-radius: 10px;
+	border-radius: 10px;
+	margin-right: 10px;
+}
+.member-content {
+	width: 80%;
+	margin-top: 1px;
+	margin-right: auto;
+	margin-bottom: 1px;
+	margin-left: auto;
+	text-align: center;
 }
