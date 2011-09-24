@@ -8,49 +8,49 @@ if(isset($_GET['page'])) { $page = $_GET['page']; } else { $page = 'home'; }
 
 switch ($page)
 {
-	case 'home' :
-		include("pages/home.php");
-		break;
-	
-	case 'login' :
-		include("pages/login.php");
-		break;
-		
-	case 'register' :
-		include("pages/register.php");
-		break;
-		
-	case 'members' :
-		include("pages/members.php");
-		break;
-		
-	case 'logout' :
-		include("pages/logout.php");
-		break;
-		
-	case 'activate' :
-		include("pages/activate.php");
-		break;
-		
-	case 'forgot' :
-		include("pages/forgot.php");
-		break;
-		
-	case 'changepass' :
-		include("pages/changepass.php");
-		break;
-		
-	case 'changeemail' :
-		include("pages/changeemail.php");
-		break;
-		
-	case 'deleteaccount' :
-		include("pages/deleteaccount.php");
-		break;
-		
-	default :
-		include("pages/home.php");
-		break;
+    case 'home' :
+        include("pages/home.php");
+        break;
+    
+    case 'login' :
+        include("pages/login.php");
+        break;
+        
+    case 'register' :
+        include("pages/register.php");
+        break;
+        
+    case 'members' :
+        include("pages/members.php");
+        break;
+        
+    case 'logout' :
+        include("pages/logout.php");
+        break;
+        
+    case 'activate' :
+        include("pages/activate.php");
+        break;
+        
+    case 'forgot' :
+        include("pages/forgot.php");
+        break;
+        
+    case 'changepass' :
+        include("pages/changepass.php");
+        break;
+        
+    case 'changeemail' :
+        include("pages/changeemail.php");
+        break;
+        
+    case 'deleteaccount' :
+        include("pages/deleteaccount.php");
+        break;
+        
+    default :
+        include("pages/home.php");
+        break;
 }
 
 ?>
@@ -67,17 +67,17 @@ switch ($page)
 
 if(isset($_COOKIE['auth_session']))
 {
-	if($auth->checksession($_COOKIE['auth_session']))
-	{
-		$session = $auth->sessioninfo($_COOKIE['auth_session']); ?>
+    if($auth->checksession($_COOKIE['auth_session']))
+    {
+        $session = $auth->sessioninfo($_COOKIE['auth_session']); ?>
 <div class="member">
-	<div class="member-content">Welcome <b><?php echo $session['username']; ?></b><br>
-	<br>
-	My Profile &gt;<br>
-	Logout &gt;
-	</div>
+    <div class="member-content">Welcome <b><?php echo $session['username']; ?></b><br>
+    <br>
+    <a href="?page=members">My Profile &gt;</a><br>
+    <a href="?page=logout">Logout &gt;</a>
+    </div>
 </div>
-<?php	}
+<?php    }
 }
 ?>
 <div class="content">
