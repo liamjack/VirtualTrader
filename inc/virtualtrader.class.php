@@ -70,6 +70,31 @@ class VirtualTrader
             return true;
         }
     }
+	
+	/*
+    * Function to check if stock exists in Database based on Stock Code
+    * @param string $stockcode
+    * @return boolean
+    */
+    
+    function CheckStock($stockcode)
+    {
+        $query = $this->mysqli->prepare("SELECT * FROM stocks WHERE code=?");
+        $query->bind_param("s", $stockcode);
+        $query->execute();
+        $query->store_result();
+        $count = $query->num_rows;
+        $query->close();
+        
+        if($count == 0)
+        {
+            return false;
+        }
+        else
+        {
+            return true;
+        }
+    }
     
     /*
     * Adds x amount of shares to a user's account, and deducts the appropriate sum
@@ -134,9 +159,9 @@ class VirtualTrader
                     $query->execute();
                     $query->close();
                     
-                    $this->LogActivity($username, "STOCK_BUY", "Purchased {$quantity} {$stockcode} shares for $ {$totalprice} - New Quantity : {$quantity} - Old Balance : $ {$balance} - New Balance : $ {$newbalance}");
+                    $this->LogActivity($username, "STOCK_BUY", "Purchased {$quantity} {$stockcode} shares for {$totalprice} $ - New Quantity : {$quantity} - Old Balance : {$balance} $ - New Balance : {$newbalance} $");
                     
-                    $this->successmsg[] = "You have purchased $quantity $stockcode shares !";
+                    $this->successmsg[] = "You have purchased $quantity $stockcode shares for {$totalprice} $ !";
                     return true;
                 }
                 else
@@ -178,10 +203,10 @@ class VirtualTrader
                     $query->execute();
                     $query->close();
                     
-                    $this->LogActivity($username, "STOCK_BUY", "Purchased {$quantity} {$stockcode} shares for $ {$totalprice} - New Quantity : {$newquantity} - Old Balance : $ {$balance} - New Balance : $ {$newbalance}");
+                    $this->LogActivity($username, "STOCK_BUY", "Purchased {$quantity} {$stockcode} shares for {$totalprice} $ - New Quantity : {$newquantity} - Old Balance : {$balance} $ - New Balance : {$newbalance} $");
                     
-                    $this->successmsg[] = "You have purchased $quantity $stockcode shares !";
-                    $this->successmsg[] = "You now have $newquantity $stockcode shares.";
+                    $this->successmsg[] = "You have purchased {$quantity} {$stockcode} shares for {$totalprice} $ !";
+                    $this->successmsg[] = "You now have {$newquantity} {$stockcode} shares.";
                     return true;
                 }
                 else
@@ -278,9 +303,9 @@ class VirtualTrader
                         $query->execute();
                         $query->close();
                         
-                        $this->LogActivity($username, "STOCK_SELL", "Sold  {$quantity} {$stockcode} shares for $ {$totalprice} - New Quantity :  0 - Old Balance : $ {$db_balance} - New Balance : $  {$newbalance}");
+                        $this->LogActivity($username, "STOCK_SELL", "Sold  {$quantity} {$stockcode} shares for {$totalprice} $ - New Quantity :  0 - Old Balance : {$db_balance} $ - New Balance : {$newbalance} $");
                         
-                        $this->successmsg[] = "You have sold {$quantity} {$stockcode} shares for $ {$totalprice} !";
+                        $this->successmsg[] = "You have sold {$quantity} {$stockcode} shares for {$totalprice} $ !";
                         $this->successmsg[] = "You have 0 {$stockcode} shares remaining.";
                         
                         return true;
@@ -299,9 +324,9 @@ class VirtualTrader
                         $query->execute();
                         $query->close();
                         
-                        $this->LogActivity($username, "STOCK_SELL", "Sold {$quantity} {$stockcode} shares for $ {$totalprice} - New Quantity : {$newquantity} - Old Balance : $ {$db_balance} - New Balance : $ {$newbalance}");
+                        $this->LogActivity($username, "STOCK_SELL", "Sold {$quantity} {$stockcode} shares for {$totalprice} $ - New Quantity : {$newquantity} - Old Balance : {$db_balance} $ - New Balance : {$newbalance} $");
                         
-                        $this->successmsg[] = "You have sold {$quantity} {$stockcode} shares for $ {$totalprice} !";
+                        $this->successmsg[] = "You have sold {$quantity} {$stockcode} shares for {$totalprice} $ !";
                         $this->successmsg[] = "You have {$newquantity} {$stockcode} shares remaining.";
                         
                         return true;
@@ -348,6 +373,117 @@ class VirtualTrader
             
             return true;
         }
+    }
+	
+	/*
+	* Fetch quantity of Shares for a user based on stock code
+	* @param string $username
+	* @param string $stockcode
+	* @return int $quantity
+	*/
+	
+	function ShareQty($username, $stockcode)
+	{
+		$query = $this->mysqli->prepare("SELECT quantity FROM userstocks WHERE username=? AND code=?");
+		$query->bind_param("ss", $username, $stockcode);
+		$query->bind_result($quantity);
+		$query->execute();
+		$query->store_result();
+		$count = $query->num_rows;
+		$query->fetch();
+		$query->close();
+		
+		if($count == 0)
+		{
+			$quantity = 0;
+			return $quantity;
+		}
+		else
+		{
+			return $quantity;
+		}
+	}
+	
+	    /*
+    * Returns a list of stocks available for trading (in table) based on page number
+    * @param int $page
+    * @param int $amount (Amount of results to display per page)
+    * @param int $exchange (INT code of exchange)
+    * @return string $table
+    */
+    
+    function ListStocks($page = 1, $amount = 10, $exchange = 1)
+    {
+        if(!is_int($page)) { $page = 1; $mysqlpage = 0; } else { $mysqlpage = $page * 10 - 10; }
+        if(!is_int($amount)) { $amount = 10; }
+        if(!is_int($exchange)) { $exchange = 1; }
+        
+        if($exchange == 1) { $exchange_name = "Nasdaq"; }
+        elseif($exchange == 2) { $exchange_name = "Potato"; }
+        
+        
+        $query = $this->mysqli->prepare("SELECT * FROM stocks WHERE exchange=?");
+        $query->bind_param("s", $exchange_name);
+        $query->execute();
+        $query->store_result();
+        $count = $query->num_rows;
+        $query->close();
+        
+        $totalpage = ceil($count / $amount);
+        
+        $i = 1;
+        $numbering = "";
+
+        while($i <= $totalpage)
+        {
+            if($i == $page) { $numbering .= " <a href=\"?page=stocks&pn=$i\">[$i]</a> "; }
+            else { $numbering .= " <a href=\"?page=stocks&pn=$i\">$i</a> "; }
+            $i++;
+        }
+        
+        $query = $this->mysqli->prepare("SELECT name, code, price, diff, diff_perc FROM stocks WHERE exchange=? ORDER BY name ASC LIMIT ?,?");
+        $query->bind_param("sii", $exchange_name, $mysqlpage, $amount);
+        $query->bind_result($stockname, $stockcode, $stockprice, $stockdiff, $stockdiff_perc);
+        $query->execute();
+        $query->store_result();
+        $count = $query->num_rows;
+        
+        if($count > 0)
+        {
+            $table = '<table width="95%" border="0" cellspacing="3" cellpadding="3"><tr>
+                        <td width="40%" height="50"><b>Stock Name :</b></td>
+                        <td width="15%"><b>Stock Code :</b></td>
+                        <td width="13%"><b>Price :</b></td>
+                <td width="20%"><b>Difference :</b></td>
+                        <td width="4%">&nbsp;</td>
+                      </tr>';
+        
+            while($query->fetch())
+            {
+                $stockprice = round($stockprice, 2);
+                $stockdiff = round($stockdiff, 2);
+                $stockdiff_perc = round($stockdiff_perc, 2);
+            
+                $table .= "<tr>
+                            <td>{$stockname}</td>
+                            <td>{$stockcode}</td>
+                            <td>{$stockprice} $</td>
+                            <td>{$stockdiff} ({$stockdiff_perc} %)</td>
+                            <td><a href=\"?page=stockinfo&code={$stockcode}\"><img src=\"images/info.png\" /></a></td>
+                            </tr>";
+            }
+            
+            $table .= "</table>";
+        }
+        else
+        {
+            $table = "0 stocks found !";
+        }
+        
+        $table .= "<br/><br/>";
+        $table .= $numbering;
+        
+        return $table;
     }
 }
 

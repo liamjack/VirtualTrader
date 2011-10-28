@@ -1,8 +1,10 @@
 <?php
 
 include("inc/auth.class.php");
+include("inc/virtualtrader.class.php");
 
 $auth = new auth;
+$virtualtrader = new VirtualTrader;
 
 if(isset($_GET['page'])) { $page = $_GET['page']; } else { $page = 'home'; }
 
@@ -48,6 +50,14 @@ switch ($page)
         include("pages/deleteaccount.php");
         break;
         
+    case 'stocks' :
+        include("pages/stocks.php");
+        break;
+        
+    case 'stockinfo' :
+        include("pages/stockinfo.php");
+        break;
+        
     default :
         include("pages/home.php");
         break;
@@ -82,9 +92,11 @@ if(isset($_COOKIE['auth_session']))
 ?>
 <div class="content">
 <h1><?php echo $title; ?></h1>
-<?php 
+<?php
 if(isset($auth->errormsg)) { echo "<span class=\"errormsg\">"; foreach ($auth->errormsg as $emsg) { echo "$emsg<br/>"; } echo "</span><br/>"; }
 if(isset($auth->successmsg)) { echo "<span class=\"successmsg\">"; foreach ($auth->successmsg as $smsg) { echo "$smsg<br/>"; } echo "</span><br/>"; }  
+if(isset($virtualtrader->errormsg)) { echo "<span class=\"errormsg\">"; foreach ($virtualtrader->errormsg as $vemsg) { echo "$vemsg<br/>"; } echo "</span><br/>"; }
+if(isset($virtualtrader->successmsg)) { echo "<span class=\"successmsg\">"; foreach ($virtualtrader->successmsg as $vsmsg) { echo "$vsmsg<br/>"; } echo "</span><br/>"; }  
 ?>
 <?php echo $content; ?>
 </div>
