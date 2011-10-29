@@ -124,6 +124,8 @@ class auth
     
         if(!isset($_COOKIE["auth_session"]))
         {
+			include("config.php");
+		
             // Input Verification :
         
             if(strlen($username) == 0) { $this->errormsg[] = "Username field is empty !"; }
@@ -190,13 +192,13 @@ class auth
                         $query->execute();
                         $query->close();
                         
-                        $message_from = "no-reply@cuonic.tk";
-                        $message_subj = "Account activation required !";
-                        $message_cont = "Hello $username<br/><br/>";
+                        $message_from = "virtualtrader@cuonic.tk";
+                        $message_subj = "VirtualTrader - Account activation required !";
+                        $message_cont = "Hello {$username}<br/><br/>";
                         $message_cont .= "You recently registered a new account on VirtualTrader<br/>";
                         $message_cont .= "To activate your account please click the following link<br/><br/>";
-                        $message_cont .= "<b><a href=\"$url?page=activate&username=$username&key=$activekey\">Activate my account</a></b>";
-                        $message_head = "From: $message_from" . "\r\n";
+                        $message_cont .= "<b><a href=\"{$vturl}?page=activate&username={$username}&key={$activekey}\">Activate my account</a></b>";
+                        $message_head = "From: {$message_from}" . "\r\n";
                         $message_head .= "MIME-Version: 1.0" . "\r\n";
                         $message_head .= "Content-type: text/html; charset=iso-8859-1" . "\r\n";
                         
@@ -644,6 +646,8 @@ class auth
     
     function resetpass($username = '0', $email ='0', $key = '0', $newpass = '0', $verifynewpass = '0')
     {
+		include("config.php");
+	
         $attcount = $this->getattempt($_SERVER['REMOTE_ADDR']);
             
         if($attcount >= 5)
@@ -693,13 +697,13 @@ class auth
                     $query->execute();
                     $query->close();
                     
-                    $message_from = "no-reply@cuonic.tk";
-                    $message_subj = "Password reset request !";
-                    $message_cont = "Hello $username<br/><br/>";
+                    $message_from = "virtualtrader@cuonic.tk";
+                    $message_subj = "VirtualTrader - Password reset request !";
+                    $message_cont = "Hello {$username}<br/><br/>";
                     $message_cont .= "You recently requested a password reset on VirtualTrader<br/>";
                     $message_cont .= "To proceed with the password reset, please click the following link :<br/><br/>";
-                    $message_cont .= "<b><a href=\"$url?page=forgot&username=$username&key=$resetkey\">Reset My Password</a></b>";
-                    $message_head = "From: $message_from" . "\r\n";
+                    $message_cont .= "<b><a href=\"{$vturl}?page=forgot&username={$username}&key={$resetkey}\">Reset My Password</a></b>";
+                    $message_head = "From: {$message_from}" . "\r\n";
                     $message_head .= "MIME-Version: 1.0" . "\r\n";
                     $message_head .= "Content-type: text/html; charset=iso-8859-1" . "\r\n";
                         
