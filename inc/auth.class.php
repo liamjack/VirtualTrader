@@ -192,7 +192,7 @@ class auth
                         $query->execute();
                         $query->close();
                         
-                        $message_from = "virtualtrader@cuonic.tk";
+                        $message_from = $vtemail;
                         $message_subj = "VirtualTrader - Account activation required !";
                         $message_cont = "Hello {$username}<br/><br/>";
                         $message_cont .= "You recently registered a new account on VirtualTrader<br/>";
@@ -697,7 +697,7 @@ class auth
                     $query->execute();
                     $query->close();
                     
-                    $message_from = "virtualtrader@cuonic.tk";
+                    $message_from = $vtemail;
                     $message_subj = "VirtualTrader - Password reset request !";
                     $message_cont = "Hello {$username}<br/><br/>";
                     $message_cont .= "You recently requested a password reset on VirtualTrader<br/>";

@@ -404,7 +404,7 @@ class VirtualTrader
 		}
 	}
 	
-	    /*
+	/*
     * Returns a list of stocks available for trading (in table) based on page number
     * @param int $page
     * @param int $amount (Amount of results to display per page)
