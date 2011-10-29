@@ -43,7 +43,7 @@ $session = $auth->sessioninfo($_COOKIE['auth_session']);
 $title = 'Members Area';
 
 $content = 'Welcome <b>' . $session['username'] . '</b> !<br/><br/>Your UID : ' . $session['uid'] . '<br/>Session expiry date : ' . $session['expiredate'] . '<br/>Your IP : ' . $session['ip']
-. '<br/><br/><span class="small"><a href="?page=changepass">Change Password ></a><br/><a href="?page=changeemail">Change Email ></a><br/><a href="?page=deleteaccount">Delete Account ></a><br/><br/><a href="?page=logout">Logout ></a></span>';
+. '<br/><br/><span class="small"><a href="?page=changepass">Change Password ></a><br/><a href="?page=changeemail">Change Email ></a><br/><a href="?page=deleteaccount">Delete Account ></a><br/><br/><a href="?page=stocks">Stock List ></a><br/><br/><a href="?page=logout">Logout ></a></span>';
 
 ?>
 
