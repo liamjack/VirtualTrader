@@ -140,3 +140,139 @@ $lang['en']['virtualtrader']['logactivity_action_empty'] = "Error encountered !"
 $lang['en']['virtualtrader']['logactivity_action_short'] = "Error encountered !";
 $lang['en']['virtualtrader']['logactivity_action_long'] = "Error encountered !";
 $lang['en']['virtualtrader']['logactivity_addinfo_long'] = "Error encountered !";
+
+// fr (French) :
+
+$lang['fr']['auth']['login_lockedout'] = "Vous avez été temporairement bloqué !";
+$lang['fr']['auth']['login_wait30'] = "Veuillez attendre 30 minutes.";
+$lang['fr']['auth']['login_username_empty'] = "Nom d'utilisateur / Mot de passe invalide !";
+$lang['fr']['auth']['login_username_short'] = "Nom d'utilisateur / Mot de passe invalide !";
+$lang['fr']['auth']['login_username_long'] = "Nom d'utilisateur / Mot de passe invalide !";
+$lang['fr']['auth']['login_password_empty'] = "Nom d'utilisateur / Mot de passe invalide !";
+$lang['fr']['auth']['login_password_short'] = "Nom d'utilisateur / Mot de passe invalide !";
+$lang['fr']['auth']['login_password_long'] = "Nom d'utilisateur / Mot de passe invalide !";
+$lang['fr']['auth']['login_incorrect'] = "Nom d'utilisateur / Mot de passe invalide !";
+$lang['fr']['auth']['login_attempts_remaining'] = "%d tentatives restantes !";
+$lang['fr']['auth']['login_account_inactive'] = "Compte non activé !";
+$lang['fr']['auth']['login_success'] = "Vous etes maintenant connecté !";
+$lang['fr']['auth']['login_already'] = "Vous etes deja connecté !";
+
+$lang['fr']['auth']['register_username_empty'] = "Champ Nom d'utilisateur vide !";
+$lang['fr']['auth']['register_username_short'] = "Nom d'utilisateur trop court !";
+$lang['fr']['auth']['register_username_long'] = "Nom d'utilisateur trop long !";
+$lang['fr']['auth']['register_password_empty'] = "Champ Mot de pass vide !";
+$lang['fr']['auth']['register_password_short'] = "Mot de passe trop court !";
+$lang['fr']['auth']['register_password_long'] = "Mot de passe trop court !";
+$lang['fr']['auth']['register_password_nomatch'] = "Les Mots de passe ne correspondent pas !";
+$lang['fr']['auth']['register_password_username'] = "Le Mot de passe ne peut pas contenir le Nom d'utilisateur !";
+$lang['fr']['auth']['register_email_empty'] = "Champ email vide !";
+$lang['fr']['auth']['register_email_short'] = "Email trop court !";
+$lang['fr']['auth']['register_email_long'] = "Email trop long !";
+$lang['fr']['auth']['register_email_invalid'] = "Email invalide !";
+$lang['fr']['auth']['register_username_exist'] = "Le nom d'utilisateur est deja pris !";
+$lang['fr']['auth']['register_email_exist'] = "Email deja utilisé !";
+$lang['fr']['auth']['register_success'] = "Nouveau compte crée ! Un email d'activation a été envoyé.";
+$lang['fr']['auth']['register_email_loggedin'] = "Vous avez deja un compte !";
+
+$lang['fr']['auth']['deletesession_invalid'] = "Erreur rencontrée !";
+
+$lang['fr']['auth']['sessioninfo_invalid'] = "Erreur rencontrée !";
+
+$lang['fr']['auth']['activate_username_empty'] = "URL Invalide !";
+$lang['fr']['auth']['activate_username_short'] = "URL Invalide !";
+$lang['fr']['auth']['activate_username_long'] = "URL Invalide !";
+$lang['fr']['auth']['activate_key_empty'] = "URL Invalide !";
+$lang['fr']['auth']['activate_key_short'] = "URL Invalide !";
+$lang['fr']['auth']['activate_key_long'] = "URL Invalide !";
+$lang['fr']['auth']['activate_username_incorrect'] = "Nom d'utilisateur incorrecte !";
+$lang['fr']['auth']['activate_account_activated'] = "Compte deja activé !";
+$lang['fr']['auth']['activate_success'] = "Compte activé !";
+$lang['fr']['auth']['activate_key_incorrect'] = "Clé d'activation incorrecte !";
+
+$lang['fr']['auth']['changepass_username_empty'] = "Erreur rencontrée !";
+$lang['fr']['auth']['changepass_username_short'] = "Erreur rencontrée !";
+$lang['fr']['auth']['changepass_username_long'] = "Erreur rencontrée !";
+$lang['fr']['auth']['changepass_currpass_empty'] = "Champ Mot de passe actuel vide !";
+$lang['fr']['auth']['changepass_currpass_short'] = "Mot de passe actuel trop court !";
+$lang['fr']['auth']['changepass_currpass_long'] = "Mot de passe actuel trop long !";
+$lang['fr']['auth']['changepass_newpass_empty'] = "Champ Nouveau mot de passe vide !";
+$lang['fr']['auth']['changepass_newpass_short'] = "Nouveau mot de passe trop court !";
+$lang['fr']['auth']['changepass_newpass_long'] = "Nouveau mot de passe trop long !";
+$lang['fr']['auth']['changepass_password_username'] = "Le Mot de passe ne peut pas contenir le nom d'utilisateur !";
+$lang['fr']['auth']['changepass_password_nomatch'] = "Les Mots de passe ne correspondent pas !";
+$lang['fr']['auth']['changepass_username_incorrect'] = "Erreur rencontrée !";
+$lang['fr']['auth']['changepass_success'] = "Mot de passe changé !";
+$lang['fr']['auth']['changepass_currpass_incorrect'] = "Mot de passe actuel incorrect !";
+
+$lang['fr']['auth']['changeemail_username_empty'] = "Erreur rencontrée !";
+$lang['fr']['auth']['changeemail_username_short'] = "Erreur rencontrée !";
+$lang['fr']['auth']['changeemail_username_long'] = "Erreur rencontrée !";
+$lang['fr']['auth']['changeemail_email_empty'] = "Champ Email vide !";
+$lang['fr']['auth']['changeemail_email_short'] = "Email trop court !";
+$lang['fr']['auth']['changeemail_email_long'] = "Email trop long !";
+$lang['fr']['auth']['changeemail_email_invalid'] = "Email invalide !";
+$lang['fr']['auth']['changeemail_username_incorrect'] = "Erreur rencontrée !";
+$lang['fr']['auth']['changeemail_email_match'] = "Le nouveau adresse email est le meme que l'adresse email existant !";
+$lang['fr']['auth']['changeemail_success'] = "Adresse Email changé !";
+
+$lang['fr']['auth']['resetpass_lockedout'] = "Vous avez été temporairement bloqué !";
+$lang['fr']['auth']['resetpass_wait30'] = "Veuillez attendre 30 minutes.";
+$lang['fr']['auth']['resetpass_email_empty'] = "CHamp Email vide !";
+$lang['fr']['auth']['resetpass_email_short'] = "Email trop court !";
+$lang['fr']['auth']['resetpass_email_long'] = "Email trop long !";
+$lang['fr']['auth']['resetpass_email_invalid'] = "Email invalide !";
+$lang['fr']['auth']['resetpass_email_incorrect'] = "Email incorrect !";
+$lang['fr']['auth']['resetpass_attempts_remaining'] = "%d tentatives restantes !";
+$lang['fr']['auth']['resetpass_email_sent'] = "Demande de réinitialisation de mot de passe envoyé a votre adresse email !";
+$lang['fr']['auth']['resetpass_key_empty'] = "Champ Clé de réinitialisation vide !";
+$lang['fr']['auth']['resetpass_key_short'] = "Clé de réinitialisation trop court !";
+$lang['fr']['auth']['resetpass_key_long'] = "Clé de réinitialisation trop long !";
+$lang['fr']['auth']['resetpass_newpass_empty'] = "Champ Nouveau mot de passe vide !";
+$lang['fr']['auth']['resetpass_newpass_short'] = "Nouveau mot de passe trop court !";
+$lang['fr']['auth']['resetpass_newpass_long'] = "Nouveau mot de passe trop court !";
+$lang['fr']['auth']['resetpass_newpass_username'] = "Le Nouveau mot de passe ne peut pas contenir le nom d'utilisateur !";
+$lang['fr']['auth']['resetpass_newpass_nomatch'] = "Les Mots de passe ne correspondent pas !";
+$lang['fr']['auth']['resetpass_username_incorrect'] = "Erreur rencontrée !";
+$lang['fr']['auth']['resetpass_success'] = "Mot de passe changé !";
+$lang['fr']['auth']['resetpass_key_incorrect'] = "Clé de réinitialisation incorrecte !";
+
+$lang['fr']['auth']['deleteaccount_username_empty'] = "Erreur rencontrée !";
+$lang['fr']['auth']['deleteaccount_username_short'] = "Erreur rencontrée !";
+$lang['fr']['auth']['deleteaccount_username_long'] = "Erreur rencontrée !";
+$lang['fr']['auth']['deleteaccount_password_empty'] = "Champ Mot de passe vide !";
+$lang['fr']['auth']['deleteaccount_password_short'] = "Mot de passe trop court !";
+$lang['fr']['auth']['deleteaccount_password_long'] = "Mot de passe trop long !";
+$lang['fr']['auth']['deleteaccount_username_incorrect'] = "Erreur rencontrée !";
+$lang['fr']['auth']['deleteaccount_success'] = "Compte supprimé !";
+$lang['fr']['auth']['deleteaccount_password_incorrect'] = "Mot de passe incorrect !";
+
+$lang['fr']['virtualtrader']['buyshare_stockcode_empty'] = "Erreur rencontrée !";
+$lang['fr']['virtualtrader']['buyshare_stockcode_long'] = "Erreur rencontrée !";
+$lang['fr']['virtualtrader']['buyshare_quantity_isint'] = "Quantité invalide !";
+$lang['fr']['virtualtrader']['buyshare_quantity_infzero'] = "Quantité invalide !";
+$lang['fr']['virtualtrader']['buyshare_username_empty'] = "Erreur rencontrée !";
+$lang['fr']['virtualtrader']['buyshare_username_short'] = "Erreur rencontrée !";
+$lang['fr']['virtualtrader']['buyshare_username_long'] = "Erreur rencontrée !";
+$lang['fr']['virtualtrader']['buyshare_success'] = "Vous avez acheté %d actions %s pour %d $ !";
+$lang['fr']['virtualtrader']['buyshare_funds_insufficient'] = "Vous n'avez pas suffisamment de fonds !";
+$lang['fr']['virtualtrader']['buyshare_recount'] = "Vous avez %d actions %s.";
+
+$lang['fr']['virtualtrader']['sellshare_stockcode_empty'] = "Erreur rencontrée !";
+$lang['fr']['virtualtrader']['sellshare_stockcode_long'] = "Erreur rencontrée !";
+$lang['fr']['virtualtrader']['sellshare_quantity_isint'] = "Quantité invalide !";
+$lang['fr']['virtualtrader']['sellshare_quantity_infzero'] = "Quantité invalide !";
+$lang['fr']['virtualtrader']['sellshare_username_empty'] = "Erreur rencontrée !";
+$lang['fr']['virtualtrader']['sellshare_username_short'] = "Erreur rencontrée !";
+$lang['fr']['virtualtrader']['sellshare_username_long'] = "Erreur rencontrée !";
+$lang['fr']['virtualtrader']['sellshare_stocks_none'] = "Vous n'avez pas d'actions %s a vendre !";
+$lang['fr']['virtualtrader']['sellshare_stocks_insufficient'] = "Vous n'avez pas assez d'actions %s !";
+$lang['fr']['virtualtrader']['sellshare_success'] = "Vous avez vendu %d actions %s pour %d $ !";
+$lang['fr']['virtualtrader']['sellshare_recount'] = "Vous avez %d actions %s restants !";
+
+$lang['fr']['virtualtrader']['logactivity_username_empty'] = "Erreur rencontrée !";
+$lang['fr']['virtualtrader']['logactivity_username_short'] = "Erreur rencontrée !";
+$lang['fr']['virtualtrader']['logactivity_username_long'] = "Erreur rencontrée !";
+$lang['fr']['virtualtrader']['logactivity_action_empty'] = "Erreur rencontrée !";
+$lang['fr']['virtualtrader']['logactivity_action_short'] = "Erreur rencontrée !";
+$lang['fr']['virtualtrader']['logactivity_action_long'] = "Erreur rencontrée !";
+$lang['fr']['virtualtrader']['logactivity_addinfo_long'] = "Erreur rencontrée !";
