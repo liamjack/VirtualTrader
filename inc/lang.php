@@ -2,7 +2,7 @@
 
 // ---------------------------
 // VirtualTrader Language File
-// Current Languages : en
+// Current Languages : en / fr
 // ---------------------------
 
 // en (English) :
