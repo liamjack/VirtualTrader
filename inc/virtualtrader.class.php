@@ -106,13 +106,16 @@ class VirtualTrader
     
     function BuyShare($stockcode, $quantity, $username)
     {
-        if(strlen($stockcode) == 0) { $this->errormsg[] = "Error encountered !"; return false; }
-        elseif(strlen($stockcode) > 10) { $this->errormsg[] = "Error encountered !"; return false; }
-        if(!is_int($quantity)) { $this->errormsg[] = "Quantity is invalid ! ECODE : 1"; return false; }
-        elseif($quantity < 0) { $this->errormsg[] = "Quantity is invalid ! ECODE : 2"; return false; }
-        if(strlen($username) == 0) { $this->errormsg[] = "Error encountered !"; return false; }
-        elseif(strlen($username) < 3) { $this->errormsg[] = "Error encountered !"; return false; }
-        elseif(strlen($username) > 30) { $this->errormsg[] = "Error encountered !"; return false; }
+		include("config.php");
+		include("lang.php");
+		
+        if(strlen($stockcode) == 0) { $this->errormsg[] = $lang[$loc]['virtualtrader']['buyshare_stockcode_empty']; return false; }
+        elseif(strlen($stockcode) > 10) { $this->errormsg[] = $lang[$loc]['virtualtrader']['buyshare_stockcode_long']; return false; }
+        if(!is_int($quantity)) { $this->errormsg[] = $lang[$loc]['virtualtrader']['buyshare_quantity_isint']; return false; }
+        elseif($quantity < 0) { $this->errormsg[] = $lang[$loc]['virtualtrader']['buyshare_quantity_infzero']; return false; }
+        if(strlen($username) == 0) { $this->errormsg[] = $lang[$loc]['virtualtrader']['buyshare_username_empty']; return false; }
+        elseif(strlen($username) < 3) { $this->errormsg[] = $lang[$loc]['virtualtrader']['buyshare_username_short']; return false; }
+        elseif(strlen($username) > 30) { $this->errormsg[] = $lang[$loc]['virtualtrader']['buyshare_username_long']; return false; }
         
         $quantity = round($quantity);
         
@@ -161,12 +164,12 @@ class VirtualTrader
                     
                     $this->LogActivity($username, "STOCK_BUY", "Purchased {$quantity} {$stockcode} shares for {$totalprice} $ - New Quantity : {$quantity} - Old Balance : {$balance} $ - New Balance : {$newbalance} $");
                     
-                    $this->successmsg[] = "You have purchased $quantity $stockcode shares for {$totalprice} $ !";
+                    $this->successmsg[] = sprintf($lang[$loc]['virtualtrader']['buyshare_success'], $quantity, $stockcode, $totalprice);
                     return true;
                 }
                 else
                 {
-                    $this->errormsg[] = "You do not have sufficient funds !";
+                    $this->errormsg[] = $lang[$loc]['virtualtrader']['buyshare_funds_insufficient'];
                     return false;
                 }
                 
@@ -205,13 +208,13 @@ class VirtualTrader
                     
                     $this->LogActivity($username, "STOCK_BUY", "Purchased {$quantity} {$stockcode} shares for {$totalprice} $ - New Quantity : {$newquantity} - Old Balance : {$balance} $ - New Balance : {$newbalance} $");
                     
-                    $this->successmsg[] = "You have purchased {$quantity} {$stockcode} shares for {$totalprice} $ !";
-                    $this->successmsg[] = "You now have {$newquantity} {$stockcode} shares.";
+                    $this->successmsg[] = sprintf($lang[$loc]['virtualtrader']['buyshare_success'], $quantity, $stockcode, $totalprice);
+                    $this->successmsg[] = sprintf($lang[$loc]['virtualtrader']['buyshare_recount'], $newquantity, $stockcode);
                     return true;
                 }
                 else
                 {
-                    $this->errormsg[] = "You do not have sufficient funds !";
+                    $this->errormsg[] = $lang[$loc]['virtualtrader']['buyshare_funds_insufficient'];
                     return false;
                 }
             }
@@ -233,13 +236,16 @@ class VirtualTrader
     
     function SellShare($stockcode, $quantity, $username)
     {
-        if(strlen($stockcode) == 0) { $this->errormsg[] = "Error encountered !"; return false; }
-        elseif(strlen($stockcode) > 10) { $this->errormsg[] = "Error encountered !"; return false; }
-        if(!is_int($quantity)) { $this->errormsg[] = "Quantity is invalid ! ECODE : 1"; return false; }
-        elseif($quantity < 0) { $this->errormsg[] = "Quantity is invalid ! ECODE : 2"; return false; }
-        if(strlen($username) == 0) { $this->errormsg[] = "Error encountered !"; return false; }
-        elseif(strlen($username) < 3) { $this->errormsg[] = "Error encountered !"; return false; }
-        elseif(strlen($username) > 30) { $this->errormsg[] = "Error encountered !"; return false; }
+		include("config.php");
+		include("lang.php");
+	
+        if(strlen($stockcode) == 0) { $this->errormsg[] = $lang[$loc]['virtualtrader']['sellshare_stockcode_empty']; return false; }
+        elseif(strlen($stockcode) > 10) { $this->errormsg[] = $lang[$loc]['virtualtrader']['sellshare_stockcode_long']; return false; }
+        if(!is_int($quantity)) { $this->errormsg[] = $lang[$loc]['virtualtrader']['sellshare_quantity_isint']; return false; }
+        elseif($quantity < 0) { $this->errormsg[] = $lang[$loc]['virtualtrader']['sellshare_quantity_infzero']; return false; }
+        if(strlen($username) == 0) { $this->errormsg[] = $lang[$loc]['virtualtrader']['sellshare_username_empty']; return false; }
+        elseif(strlen($username) < 3) { $this->errormsg[] = $lang[$loc]['virtualtrader']['sellshare_username_short']; return false; }
+        elseif(strlen($username) > 30) { $this->errormsg[] = $lang[$loc]['virtualtrader']['sellshare_username_long']; return false; }
         
         $quantity = round($quantity);
         
@@ -258,7 +264,7 @@ class VirtualTrader
             {
                 // User does not have any shares for the provided stockcode
                 
-                $this->errormsg[] = "You do not have any {$stockcode} shares to sell !";
+                $this->errormsg[] = sprintf($lang[$loc]['virtualtrader']['sellshare_stocks_none'], $stockcode);
                 return false;
             }
             else
@@ -267,7 +273,7 @@ class VirtualTrader
                 {
                     // User is attempting to sell more shares than they have
                     
-                    $this->errormsg[] = "You do not have that many {$stockcode} shares to sell !";
+                    $this->errormsg[] = sprintf($lang[$loc]['virtualtrader']['sellshare_stocks_insufficient'], $stockcode);
                     return false;
                 }
                 else
@@ -305,8 +311,8 @@ class VirtualTrader
                         
                         $this->LogActivity($username, "STOCK_SELL", "Sold  {$quantity} {$stockcode} shares for {$totalprice} $ - New Quantity :  0 - Old Balance : {$db_balance} $ - New Balance : {$newbalance} $");
                         
-                        $this->successmsg[] = "You have sold {$quantity} {$stockcode} shares for {$totalprice} $ !";
-                        $this->successmsg[] = "You have 0 {$stockcode} shares remaining.";
+                        $this->successmsg[] = sprintf($lang[$loc]['virtualtrader']['sellshare_success'], $quantity, $stockcode, $totalprice);
+                        $this->successmsg[] = sprintf($lang[$loc]['virtualtrader']['sellshare_recount'], 0, $stockcode);
                         
                         return true;
                     }
@@ -326,8 +332,8 @@ class VirtualTrader
                         
                         $this->LogActivity($username, "STOCK_SELL", "Sold {$quantity} {$stockcode} shares for {$totalprice} $ - New Quantity : {$newquantity} - Old Balance : {$db_balance} $ - New Balance : {$newbalance} $");
                         
-                        $this->successmsg[] = "You have sold {$quantity} {$stockcode} shares for {$totalprice} $ !";
-                        $this->successmsg[] = "You have {$newquantity} {$stockcode} shares remaining.";
+                        $this->successmsg[] = sprintf($lang[$loc]['virtualtrader']['sellshare_success'], $quantity, $stockcode, $totalprice);
+                        $this->successmsg[] = sprintf($lang[$loc]['virtualtrader']['sellshare_recount'], 0, $stockcode);
                         
                         return true;
                     }
@@ -350,16 +356,19 @@ class VirtualTrader
     
     function LogActivity($username, $action, $additionalinfo = "none")
     {
-        if(strlen($username) == 0) { $this->errormsg[] = "Error encountered !"; return false; }
-        elseif(strlen($username) < 3) { $this->errormsg[] = "Error encountered !"; return false; }
-        elseif(strlen($username) > 30) { $this->errormsg[] = "Error encountered !"; return false; }
+		include("config.php");
+		include("lang.php");
+	
+        if(strlen($username) == 0) { $this->errormsg[] = $lang[$loc]['virtualtrader']['logactivity_username_empty']; return false; }
+        elseif(strlen($username) < 3) { $this->errormsg[] = $lang[$loc]['virtualtrader']['logactivity_username_short']; return false; }
+        elseif(strlen($username) > 30) { $this->errormsg[] = $lang[$loc]['virtualtrader']['logactivity_username_long']; return false; }
         
-        if(strlen($action) == 0) { $this->errormsg[] = "Error encountered !"; return false; }
-        elseif(strlen($action) < 3) { $this->errormsg[] = "Error encountered !"; return false; }
-        elseif(strlen($action) > 100) { $this->errormsg[] = "Error encountered !"; return false; }
+        if(strlen($action) == 0) { $this->errormsg[] = $lang[$loc]['virtualtrader']['logactivity_action_empty']; return false; }
+        elseif(strlen($action) < 3) { $this->errormsg[] = $lang[$loc]['virtualtrader']['logactivity_action_short']; return false; }
+        elseif(strlen($action) > 100) { $this->errormsg[] = $lang[$loc]['virtualtrader']['logactivity_action_long']; return false; }
         
         if(strlen($additionalinfo) == 0) { $additionalinfo = "none"; }
-        elseif(strlen($additionalinfo) > 500) { $this->errormsg[] = "Error encountered !"; return false; }
+        elseif(strlen($additionalinfo) > 500) { $this->errormsg[] = $lang[$loc]['virtualtrader']['logactivity_addinfo_long']; return false; }
         
         if(count($this->errormsg) == 0)
         {

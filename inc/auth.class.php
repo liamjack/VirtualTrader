@@ -22,14 +22,17 @@ class auth
     
     function login($username, $password)
     {
+		include("config.php");
+		include("lang.php");
+		
         if(!isset($_COOKIE["auth_session"]))
         {
             $attcount = $this->getattempt($_SERVER['REMOTE_ADDR']);
             
             if($attcount >= 5)
             {
-                $this->errormsg[] = "You have been temporarily locked out !";
-                $this->errormsg[] = "Please wait 30 minutes.";
+                $this->errormsg[] = $lang[$loc]['auth']['login_lockedout'];
+                $this->errormsg[] = $lang[$loc]['auth']['login_wait30'];
                 
                 return false;
             }
@@ -37,12 +40,12 @@ class auth
             {
                 // Input verification :
             
-                if(strlen($username) == 0) { $this->errormsg[] = "Username / Password is invalid !"; return false; }
-                elseif(strlen($username) > 30) { $this->errormsg[] = "Username / Password is invalid !"; return false; }
-                elseif(strlen($username) < 3) { $this->errormsg[] = "Username / Password is invalid !"; return false; }
-                elseif(strlen($password) == 0) { $this->errormsg[] = "Username / Password is invalid !"; return false; }
-                elseif(strlen($password) > 30) { $this->errormsg[] = "Username / Password is invalid !"; return false; }
-                elseif(strlen($password) < 5) { $this->errormsg[] = "Username / Password is invalid !"; return false; }
+                if(strlen($username) == 0) { $this->errormsg[] = $lang[$loc]['auth']['login_username_empty']; return false; }
+                elseif(strlen($username) > 30) { $this->errormsg[] = $lang[$loc]['auth']['login_username_long']; return false; }
+                elseif(strlen($username) < 3) { $this->errormsg[] = $lang[$loc]['auth']['login_username_short']; return false; }
+                elseif(strlen($password) == 0) { $this->errormsg[] = $lang[$loc]['auth']['login_password_empty']; return false; }
+                elseif(strlen($password) > 30) { $this->errormsg[] = $lang[$loc]['auth']['login_password_short']; return false; }
+                elseif(strlen($password) < 5) { $this->errormsg[] = $lang[$loc]['auth']['login_password_long']; return false; }
                 else 
                 {
                     // Input is valid
@@ -62,14 +65,14 @@ class auth
                     {
                         // Username and / or password are incorrect
                     
-                        $this->errormsg[] = "Username / Password is incorrect !";
+                        $this->errormsg[] = $lang[$loc]['auth']['login_incorrect'];
                         
                         $this->addattempt($_SERVER['REMOTE_ADDR']);
                         
                         $attcount = $attcount + 1;
                         $remaincount = 5 - $attcount;
                         
-                        $this->errormsg[] = "$remaincount attempts remaining.";
+                        $this->errormsg[] = sprintf($lang[$loc]['auth']['login_attempts_remaining'], $remaincount);
                         
                         return false;
                     }
@@ -81,7 +84,7 @@ class auth
                         {
                             // Account is not activated
                             
-                            $this->errormsg[] = "Account is not activated !";
+                            $this->errormsg[] = $lang[$loc]['auth']['login_account_inactive'];
                             
                             return false;
                         }
@@ -91,7 +94,7 @@ class auth
                         
                             $this->newsession($username);                
                     
-                            $this->successmsg[] = "You are now logged in !";
+                            $this->successmsg[] = $lang[$loc]['auth']['login_success'];
                             
                             return true;
                         }
@@ -103,7 +106,7 @@ class auth
         {
             // User is already logged in
             
-            $this->errormsg[] = "You are already logged in !";
+            $this->errormsg[] = $lang[$loc]['auth']['login_already'];
             
             return false;
         }
@@ -120,26 +123,26 @@ class auth
     
     function register($username, $password, $verifypassword, $email)
     {
-        include_once("config.php");
+        include("config.php");
+		include("lang.php");
     
         if(!isset($_COOKIE["auth_session"]))
         {
-			include("config.php");
 		
             // Input Verification :
         
-            if(strlen($username) == 0) { $this->errormsg[] = "Username field is empty !"; }
-            elseif(strlen($username) > 30) { $this->errormsg[] = "Username is too long !"; }
-            elseif(strlen($username) < 3) { $this->errormsg[] = "Username is too short !"; }
-            if(strlen($password) == 0) { $this->errormsg[] = "Password field is empty !"; }
-            elseif(strlen($password) > 30) { $this->errormsg[] = "Password is too long !"; }
-            elseif(strlen($password) < 5) { $this->errormsg[] = "Password is too short !"; }
-            elseif($password !== $verifypassword) { $this->errormsg[] = "Passwords don't match !"; }
-            elseif(strstr($password, $username)) { $this->errormsg[] = "Password cannot contain the username !"; }
-            if(strlen($email) == 0) { $this->errormsg[] = "Email field is empty !"; }
-            elseif(strlen($email) > 100) { $this->errormsg[] = "Email is too long !"; }
-            elseif(strlen($email) < 5) { $this->errormsg[] = "Email is too short !"; }
-            elseif(!filter_var($email, FILTER_VALIDATE_EMAIL)) { $this->errormsg[] = "Email address is invalid !"; }
+            if(strlen($username) == 0) { $this->errormsg[] = $lang[$loc]['auth']['register_username_empty']; }
+            elseif(strlen($username) > 30) { $this->errormsg[] = $lang[$loc]['auth']['register_username_long']; }
+            elseif(strlen($username) < 3) { $this->errormsg[] = $lang[$loc]['auth']['register_username_short']; }
+            if(strlen($password) == 0) { $this->errormsg[] = $lang[$loc]['auth']['register_password_empty']; }
+            elseif(strlen($password) > 30) { $this->errormsg[] = $lang[$loc]['auth']['register_password_long']; }
+            elseif(strlen($password) < 5) { $this->errormsg[] = $lang[$loc]['auth']['register_password_short']; }
+            elseif($password !== $verifypassword) { $this->errormsg[] = $lang[$loc]['auth']['register_password_nomatch']; }
+            elseif(strstr($password, $username)) { $this->errormsg[] = $lang[$loc]['auth']['register_password_username']; }
+            if(strlen($email) == 0) { $this->errormsg[] = $lang[$loc]['auth']['register_email_empty']; }
+            elseif(strlen($email) > 100) { $this->errormsg[] = $lang[$loc]['auth']['register_email_long']; }
+            elseif(strlen($email) < 5) { $this->errormsg[] = $lang[$loc]['auth']['register_email_short']; }
+            elseif(!filter_var($email, FILTER_VALIDATE_EMAIL)) { $this->errormsg[] = $lang[$loc]['auth']['register_email_invalid']; }
         
             if(count($this->errormsg) == 0)
             {
@@ -156,7 +159,7 @@ class auth
                 {
                     // Username already exists
                 
-                    $this->errormsg[] = "Username is already taken !";
+                    $this->errormsg[] = $lang[$loc]['auth']['register_username_exist'];
                     
                     return false;
                 }
@@ -175,7 +178,7 @@ class auth
                     {
                         // Email address is already used
                     
-                        $this->errormsg[] = "Email is already associated to another account !";
+                        $this->errormsg[] = $lang[$loc]['auth']['register_email_exist'];
                         
                         return false;                    
                     }
@@ -204,7 +207,7 @@ class auth
                         
                         mail($email, $message_subj, $message_cont, $message_head);
                     
-                        $this->successmsg[] = "New Account Created ! Activation email sent to your email address.";
+                        $this->successmsg[] = $lang[$loc]['auth']['register_success'];
                         
                         return true;                    
                     }
@@ -219,7 +222,7 @@ class auth
         {
             // User is logged in
         
-            $this->errormsg[] = "You are currently logged in !";
+            $this->errormsg[] = $lang[$loc]['auth']['register_email_loggedin'];
             
             return false;
         }
@@ -269,6 +272,9 @@ class auth
     
     function deletesession($hash)
     {
+		include("config.php");
+		include("lang.php");
+	
         $query = $this->mysqli->prepare("SELECT username FROM sessions WHERE hash=?");
         $query->bind_param("s", $hash);
         $query->bind_result($username);
@@ -281,7 +287,7 @@ class auth
         {
             // Hash doesn't exist
         
-            $this->errormsg[] = "Invalid Session Hash !";
+            $this->errormsg[] = $lang[$loc]['auth']['deletesession_invalid'];
             
             setcookie("auth_session", $hash, time() - 3600);
         }
@@ -306,6 +312,9 @@ class auth
     
     function sessioninfo($hash)
     {
+		include("config.php");
+		include("lang.php");
+	
         $query = $this->mysqli->prepare("SELECT uid, username, expiredate, ip FROM sessions WHERE hash=?");
         $query->bind_param("s", $hash);
         $query->bind_result($session['uid'], $session['username'], $session['expiredate'], $session['ip']);
@@ -319,7 +328,7 @@ class auth
         {
             // Hash doesn't exist
         
-            $this->errormsg[] = "Invalid Session Hash !";
+            $this->errormsg[] = $lang[$loc]['auth']['sessioninfo_invalid'];
             setcookie("auth_session", $hash, time() - 3600);
             
             return false;
@@ -428,13 +437,17 @@ class auth
     
     function activate($username, $key)
     {
+		include("config.php");
+		include("lang.php");
+	
         // Input verification
     
-        if(strlen($username) == 0) { $this->errormsg[] = "Invalid URL !"; return false; }
-        elseif(strlen($username) > 30) { $this->errormsg[] = "Invalid URL !"; return false; }
-        elseif(strlen($username) < 3) { $this->errormsg[] = "Invalid URL !"; return false; }
-        elseif(strlen($key) > 15) { $this->errormsg[] = "Invalid URL !"; return false; }
-        elseif(strlen($key) < 15) { $this->errormsg[] = "Invalid URL !"; return false; }
+        if(strlen($username) == 0) { $this->errormsg[] = $lang[$loc]['auth']['activate_username_empty']; return false; }
+        elseif(strlen($username) > 30) { $this->errormsg[] = $lang[$loc]['auth']['activate_username_long']; return false; }
+        elseif(strlen($username) < 3) { $this->errormsg[] = $lang[$loc]['auth']['activate_username_short']; return false; }
+		elseif(strlen($key) == 0) { $this->errormsg[] = $lang[$loc]['auth']['activate_key_empty']; return false; }
+        elseif(strlen($key) > 15) { $this->errormsg[] = $lang[$loc]['auth']['activate_key_long']; return false; }
+        elseif(strlen($key) < 15) { $this->errormsg[] = $lang[$loc]['auth']['activate_key_short']; return false; }
         else
         {
             // Input is valid
@@ -452,7 +465,7 @@ class auth
             {
                 // User doesn't exist
                 
-                $this->errormsg[] = "Username is incorrect !";
+                $this->errormsg[] = $lang[$loc]['auth']['activate_username_incorrect'];
                 
                 return false;
             }
@@ -464,7 +477,7 @@ class auth
                 {
                     // Account is already activated
                     
-                    $this->errormsg[] = "Account is already activated !";
+                    $this->errormsg[] = $lang[$loc]['auth']['activate_account_activated'];
                     
                     return true;
                 }
@@ -484,7 +497,7 @@ class auth
                         $query->execute();
                         $query->close();
                         
-                        $this->successmsg[] = "Account successfully activated !";
+                        $this->successmsg[] = $lang[$loc]['auth']['activate_success'];
                         
                         return true;                        
                     }
@@ -492,7 +505,7 @@ class auth
                     {
                         // Activation Keys don't match
                         
-                        $this->errormsg[] = "Activation Key is incorrect !";
+                        $this->errormsg[] = $lang[$loc]['auth']['activate_key_incorrect'];
                         
                         return false;
                     }
@@ -512,18 +525,20 @@ class auth
     
     function changepass($username, $currpass, $newpass, $verifynewpass)
     {
+		include("config.php");
+		include("lang.php");
         
-        if(strlen($username) == 0) { $this->errormsg[] = "Error encountered whilst processing your request !"; }
-        elseif(strlen($username) > 30) { $this->errormsg[] = "Error encountered whilst processing your request !"; }
-        elseif(strlen($username) < 3) { $this->errormsg[] = "Error encountered whilst processing your request !"; }
-        if(strlen($currpass) == 0) { $this->errormsg[] = "Current Password field is empty !"; }
-        elseif(strlen($currpass) < 5) { $this->errormsg[] = "Current Password is too short !"; }
-        elseif(strlen($currpass) > 30) { $this->errormsg[] = "Current Password is too long !"; }
-        if(strlen($newpass) == 0) { $this->errormsg[] = "New Password field is empty !"; }
-        elseif(strlen($newpass) < 5) { $this->errormsg[] = "New Password is too short !"; }
-        elseif(strlen($newpass) > 30) { $this->errormsg[] = "New Password is too long !"; }
-        elseif(strstr($newpass, $username)) { $this->errormsg[] = "Password cannot contain the username !"; }
-        elseif($newpass !== $verifynewpass) { $this->errormsg[] = "Passwords don't match !"; }
+        if(strlen($username) == 0) { $this->errormsg[] = $lang[$loc]['auth']['changepass_username_empty']; }
+        elseif(strlen($username) > 30) { $this->errormsg[] = $lang[$loc]['auth']['changepass_username_long']; }
+        elseif(strlen($username) < 3) { $this->errormsg[] = $lang[$loc]['auth']['changepass_username_short']; }
+        if(strlen($currpass) == 0) { $this->errormsg[] = $lang[$loc]['auth']['changepass_currpass_empty']; }
+        elseif(strlen($currpass) < 5) { $this->errormsg[] = $lang[$loc]['auth']['changepass_currpass_short']; }
+        elseif(strlen($currpass) > 30) { $this->errormsg[] = $lang[$loc]['auth']['changepass_currpass_long']; }
+        if(strlen($newpass) == 0) { $this->errormsg[] = $lang[$loc]['auth']['changepass_newpass_empty']; }
+        elseif(strlen($newpass) < 5) { $this->errormsg[] = $lang[$loc]['auth']['changepass_newpass_short']; }
+        elseif(strlen($newpass) > 30) { $this->errormsg[] = $lang[$loc]['auth']['changepass_newpass_long']; }
+        elseif(strstr($newpass, $username)) { $this->errormsg[] = $lang[$loc]['auth']['changepass_password_username']; }
+        elseif($newpass !== $verifynewpass) { $this->errormsg[] = $lang[$loc]['auth']['changepass_password_nomatch']; }
         
         if(count($this->errormsg) == 0)
         {
@@ -541,7 +556,7 @@ class auth
             
             if($count == 0)
             {
-                $this->errormsg[] = "Username is incorrect !";
+                $this->errormsg[] = $lang[$loc]['auth']['changepass_username_incorrect'];
                 
                 return false;
             }
@@ -554,13 +569,13 @@ class auth
                     $query->execute();
                     $query->close();
                     
-                    $this->successmsg[] = "Password successfully changed !";
+                    $this->successmsg[] = $lang[$loc]['auth']['changepass_success'];
                     
                     return true;
                 }
                 else 
                 {
-                    $this->errormsg[] = "Current Password is incorrect !";
+                    $this->errormsg[] = $lang[$loc]['auth']['changepass_currpass_incorrect'];
                     
                     return false;
                 }
@@ -581,13 +596,16 @@ class auth
     
     function changeemail($username, $email)
     {
-        if(strlen($username) == 0) { $this->errormsg[] = "Error encountered whilst processing your request !"; }
-        elseif(strlen($username) > 30) { $this->errormsg[] = "Error encountered whilst processing your request !"; }
-        elseif(strlen($username) < 3) { $this->errormsg[] = "Error encountered whilst processing your request !"; }
-        if(strlen($email) == 0) { $this->errormsg[] = "Email field is empty !"; }
-        elseif(strlen($email) > 100) { $this->errormsg[] = "Email is too long !"; }
-        elseif(strlen($email) < 5) { $this->errormsg[] = "Email is too short !"; }
-        elseif(!filter_var($email, FILTER_VALIDATE_EMAIL)) { $this->errormsg[] = "Email address is invalid !"; }
+		include("config.php");
+		include("lang.php");
+		
+        if(strlen($username) == 0) { $this->errormsg[] = $lang[$loc]['auth']['changeemail_username_empty']; }
+        elseif(strlen($username) > 30) { $this->errormsg[] = $lang[$loc]['auth']['changeemail_username_long']; }
+        elseif(strlen($username) < 3) { $this->errormsg[] = $lang[$loc]['auth']['changeemail_username_short']; }
+        if(strlen($email) == 0) { $this->errormsg[] = $lang[$loc]['auth']['changeemail_email_empty']; }
+        elseif(strlen($email) > 100) { $this->errormsg[] = $lang[$loc]['auth']['changeemail_email_long']; }
+        elseif(strlen($email) < 5) { $this->errormsg[] = $lang[$loc]['auth']['changeemail_email_short']; }
+        elseif(!filter_var($email, FILTER_VALIDATE_EMAIL)) { $this->errormsg[] = $lang[$loc]['auth']['changeemail_email_invalid']; }
         
         if(count($this->errormsg) == 0)
         {
@@ -602,7 +620,7 @@ class auth
             
             if($count == 0)
             {
-                $this->errormsg[] = "Username is incorrect !";
+                $this->errormsg[] = $lang[$loc]['auth']['changeemail_username_incorrect'];
                 
                 return false;
             }
@@ -610,7 +628,7 @@ class auth
             {
                 if($email == $db_email)
                 {
-                    $this->errormsg[] = "New email address matches the existing one !";
+                    $this->errormsg[] = $lang[$loc]['auth']['changeemail_email_match'];
                     
                     return false;
                 }
@@ -621,7 +639,7 @@ class auth
                     $query->execute();
                     $query->close();
                     
-                    $this->successmsg[] = "Email address successfully changed !";
+                    $this->successmsg[] = $lang[$loc]['auth']['changeemail_success'];
                     
                     return true;
                 }
@@ -647,13 +665,14 @@ class auth
     function resetpass($username = '0', $email ='0', $key = '0', $newpass = '0', $verifynewpass = '0')
     {
 		include("config.php");
+		include("lang.php");
 	
         $attcount = $this->getattempt($_SERVER['REMOTE_ADDR']);
             
         if($attcount >= 5)
         {
-            $this->errormsg[] = "You have been temporarily locked out !";
-            $this->errormsg[] = "Please wait 30 minutes.";
+            $this->errormsg[] = $lang[$loc]['auth']['resetpass_lockedout'];
+            $this->errormsg[] = $lang[$loc]['auth']['resetpass_wait30'];
                 
             return false;
         }
@@ -661,10 +680,10 @@ class auth
         {
             if($username == '0' && $key == '0')
             {
-                if(strlen($email) == 0) { $this->errormsg[] = "Email field is empty !"; }
-                elseif(strlen($email) > 100) { $this->errormsg[] = "Email address is too long !"; }
-                elseif(strlen($email) < 5) { $this->errormsg[] = "Email address is too short !"; }
-                elseif(!filter_var($email, FILTER_VALIDATE_EMAIL)) { $this->errormsg[] = "Email address is invalid !"; }
+                if(strlen($email) == 0) { $this->errormsg[] = $lang[$loc]['auth']['resetpass_email_empty']; }
+                elseif(strlen($email) > 100) { $this->errormsg[] = $lang[$loc]['auth']['resetpass_email_long']; }
+                elseif(strlen($email) < 5) { $this->errormsg[] = $lang[$loc]['auth']['resetpass_email_short']; }
+                elseif(!filter_var($email, FILTER_VALIDATE_EMAIL)) { $this->errormsg[] = $lang[$loc]['auth']['resetpass_email_invalid']; }
                 
                 $resetkey = $this->randomkey(15);
                 
@@ -679,12 +698,12 @@ class auth
                 
                 if($count == 0)
                 {
-                    $this->errormsg[] = "Email is incorrect !";
+                    $this->errormsg[] = $lang[$loc]['auth']['resetpass_email_incorrect'];
                     
                     $attcount = $attcount + 1;
                     $remaincount = 5 - $attcount;
                         
-                    $this->errormsg[] = "$remaincount attempts remaining !";
+                    $this->errormsg[] = sprintf($lang[$loc]['auth']['resetpass_attempts_remaining'], $remaincount);
                         
                     $this->addattempt($_SERVER['REMOTE_ADDR']);
                         
@@ -709,7 +728,7 @@ class auth
                         
                     mail($email, $message_subj, $message_cont, $message_head);
                     
-                    $this->successmsg[] = "Password Reset Request sent to your email address !";
+                    $this->successmsg[] = $lang[$loc]['auth']['resetpass_email_sent'];
                         
                     return true;
                 }
@@ -718,14 +737,14 @@ class auth
             {
                 // Reset Password
                 
-                if(strlen($key) == 0) { $this->errormsg[] = "Reset Key field is empty !"; }
-                elseif(strlen($key) < 15) { $this->errormsg[] = "Reset Key is too short !"; }
-                elseif(strlen($key) > 15) { $this->errormsg[] = "Reset Key is too long !"; }
-                if(strlen($newpass) == 0) { $this->errormsg[] = "New Password field is empty !"; }
-                elseif(strlen($newpass) > 30) { $this->errormsg[] = "New Password is too long !"; }
-                elseif(strlen($newpass) < 5) { $this->errormsg[] = "New Password is too short !"; }
-                elseif(strstr($newpass, $username)) { $this->errormsg[] = "New Password cannot contain username !"; }
-                elseif($newpass !== $verifynewpass) { $this->errormsg[] = "Passwords don't match !"; }
+                if(strlen($key) == 0) { $this->errormsg[] = $lang[$loc]['auth']['resetpass_key_empty']; }
+                elseif(strlen($key) < 15) { $this->errormsg[] = $lang[$loc]['auth']['resetpass_key_short']; }
+                elseif(strlen($key) > 15) { $this->errormsg[] = $lang[$loc]['auth']['resetpass_key_long']; }
+                if(strlen($newpass) == 0) { $this->errormsg[] = $lang[$loc]['auth']['resetpass_newpass_empty']; }
+                elseif(strlen($newpass) > 30) { $this->errormsg[] = $lang[$loc]['auth']['resetpass_newpass_long']; }
+                elseif(strlen($newpass) < 5) { $this->errormsg[] = $lang[$loc]['auth']['resetpass_newpass_short']; }
+                elseif(strstr($newpass, $username)) { $this->errormsg[] = $lang[$loc]['auth']['resetpass_newpass_username']; }
+                elseif($newpass !== $verifynewpass) { $this->errormsg[] = $lang[$loc]['auth']['resetpass_newpass_nomatch']; }
                 
                 if(count($this->errormsg) == 0)
                 {
@@ -740,12 +759,12 @@ class auth
                     
                     if($count == 0)
                     {
-                        $this->errormsg[] = "Username is incorrect !";
+                        $this->errormsg[] = $lang[$loc]['auth']['resetpass_username_incorrect'];
                         
                         $attcount = $attcount + 1;
                         $remaincount = 5 - $attcount;
                         
-                        $this->errormsg[] = "$remaincount attempts remaining !";
+                        $this->errormsg[] = sprintf($lang[$loc]['auth']['resetpass_attempts_remaining'], $remaincount);
                         
                         $this->addattempt($_SERVER['REMOTE_ADDR']);
                         
@@ -764,18 +783,18 @@ class auth
                             $query->execute();
                             $query->close();
                             
-                            $this->successmsg[] = "Password successfully changed !";
+                            $this->successmsg[] = $lang[$loc]['auth']['resetpass_success'];
                             
                             return true;
                         }
                         else
                         {
-                            $this->errormsg[] = "Reset Key is incorrect !";
+                            $this->errormsg[] = $lang[$loc]['auth']['resetpass_key_incorrect'];
                             
                             $attcount = $attcount + 1;
                             $remaincount = 5 - $attcount;
                         
-                            $this->errormsg[] = "$remaincount attempts remaining !";
+                            $this->errormsg[] = sprintf($lang[$loc]['auth']['resetpass_attempts_remaining'], $remaincount);
                         
                             $this->addattempt($_SERVER['REMOTE_ADDR']);
                         
@@ -844,12 +863,15 @@ class auth
     
     function deleteaccount($username, $password)
     {
-        if(strlen($username) == 0) { $this->errormsg[] = "Error encountered whilst processing your request !"; }
-        elseif(strlen($username) > 30) { $this->errormsg[] = "Error encountered whilst processing your request !"; }
-        elseif(strlen($username) < 3) { $this->errormsg[] = "Error encountered whilst processing your request !"; }
-        if(strlen($password) == 0) { $this->errormsg[] = "Password field is empty !"; }
-        elseif(strlen($password) > 30) { $this->errormsg[] = "Password is too long !"; }
-        elseif(strlen($password) < 5) { $this->errormsg[] = "Password is too short !"; }
+		include("config.php");
+		include("lang.php");
+	
+        if(strlen($username) == 0) { $this->errormsg[] = $lang[$loc]['auth']['deleteaccount_username_empty']; }
+        elseif(strlen($username) > 30) { $this->errormsg[] = $lang[$loc]['auth']['deleteaccount_username_long']; }
+        elseif(strlen($username) < 3) { $this->errormsg[] = $lang[$loc]['auth']['deleteaccount_username_short']; }
+        if(strlen($password) == 0) { $this->errormsg[] = $lang[$loc]['auth']['deleteaccount_password_empty']; }
+        elseif(strlen($password) > 30) { $this->errormsg[] = $lang[$loc]['auth']['deleteaccount_password_long']; }
+        elseif(strlen($password) < 5) { $this->errormsg[] = $lang[$loc]['auth']['deleteaccount_password_short']; }
         
         if(count($this->errormsg) == 0)
         {
@@ -866,7 +888,7 @@ class auth
             
             if($count == 0)
             {
-                $this->errormsg[] = "Username is incorrect !";
+                $this->errormsg[] = $lang[$loc]['auth']['deleteaccount_username_incorrect'];
                 
                 return false;
             }
@@ -884,13 +906,13 @@ class auth
                     $query->execute();
                     $query->close();
                     
-                    $this->successmsg[] = "Account deleted successfully !";
+                    $this->successmsg[] = $lang[$loc]['auth']['deleteaccount_success'];
                     
                     return true;
                 }
                 else 
                 {
-                    $this->errormsg[] = "Password is incorrect !";
+                    $this->errormsg[] = $lang[$loc]['auth']['deleteaccount_password_incorrect'];
                     
                     return false;
                 }
