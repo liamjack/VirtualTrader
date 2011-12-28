@@ -276,3 +276,5 @@ $lang['fr']['virtualtrader']['logactivity_action_empty'] = "Erreur rencontrée !"
 $lang['fr']['virtualtrader']['logactivity_action_short'] = "Erreur rencontrée !";
 $lang['fr']['virtualtrader']['logactivity_action_long'] = "Erreur rencontrée !";
 $lang['fr']['virtualtrader']['logactivity_addinfo_long'] = "Erreur rencontrée !";
+
+?>
