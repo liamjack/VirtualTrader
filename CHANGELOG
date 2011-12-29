@@ -1,0 +1,17 @@
+29.12.2011 - Rev 17 - Added CHANGELOG
+28.12.2011 - Rev 16 - Forgot to close <?php tags
+28.12.2011 - Rev 15 - Fixed Current Languages list in lang.php
+28.12.2011 - Rev 14 - Translated into French
+28.12.2011 - Rev 13 - Created Language System. Added Error / Success messages for Auth and VT Class. Updated Classes
+29.10.2011 - Rev 12 - Added Email FROM to config.php, updated classes, fixed syntaxing
+29.10.2011 - Rev 11 - Added cron.php for Auth System. Recommended to be ran every 5 mins
+29.10.2011 - Rev 10 - Fixed Activation / Password reset URLs
+29.10.2011 - Rev 09 - Added Stock list link to Members Area
+29.10.2011 - Rev 08 - Added Stock listing function + page, Stock info function + page, buy / sell functionality etc...
+24.09.2011 - Rev 07 - Removed test.php
+24.09.2011 - Rev 06 - Added an activity logging function to the VT Class. Updated DB Layout
+02.09.2011 - Rev 05 - Started work on virtualtrader.class.php
+01.09.2011 - Rev 04 - Modified Page Layout, fixed messy CSS
+31.08.2011 - Rev 03 - Modified links in activation / Password reset email
+31.08.2011 - Rev 02 - Added README
+31.08.2011 - Rev 01 - Implemented Auth System and basic template system
