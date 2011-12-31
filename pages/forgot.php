@@ -1,15 +1,5 @@
 <?php
 
-if(isset($_GET['m']))
-{
-	switch($_GET['m'])
-	{
-		case '1' :
-			$auth->errormsg[] = "Invalid URL !";
-			break;
-	}
-}
-
 if(isset($_POST['email']))
 {
 	$auth->resetpass('0', $_POST['email']);
@@ -58,8 +48,8 @@ else
 	}
 	else
 	{
-		header("Location: ?page=forgot&m=1");
-		exit();
+		$title = "";
+		$content = "";
 	}
 }
 

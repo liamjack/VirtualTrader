@@ -162,7 +162,7 @@ class VirtualTrader
                     $query->execute();
                     $query->close();
                     
-                    $this->LogActivity($username, "STOCK_BUY", "Purchased {$quantity} {$stockcode} shares for {$totalprice} $ - New Quantity : {$quantity} - Old Balance : {$balance} $ - New Balance : {$newbalance} $");
+                    $this->LogActivity($username, "VIRTUALTRADER_STOCK_BUY", "Purchased {$quantity} {$stockcode} shares for {$totalprice} $ - New Quantity : {$quantity} - Old Balance : {$balance} $ - New Balance : {$newbalance} $");
                     
                     $this->successmsg[] = sprintf($lang[$loc]['virtualtrader']['buyshare_success'], $quantity, $stockcode, $totalprice);
                     return true;
@@ -206,7 +206,7 @@ class VirtualTrader
                     $query->execute();
                     $query->close();
                     
-                    $this->LogActivity($username, "STOCK_BUY", "Purchased {$quantity} {$stockcode} shares for {$totalprice} $ - New Quantity : {$newquantity} - Old Balance : {$balance} $ - New Balance : {$newbalance} $");
+                    $this->LogActivity($username, "VIRTUALTRADER_STOCK_BUY", "Purchased {$quantity} {$stockcode} shares for {$totalprice} $ - New Quantity : {$newquantity} - Old Balance : {$balance} $ - New Balance : {$newbalance} $");
                     
                     $this->successmsg[] = sprintf($lang[$loc]['virtualtrader']['buyshare_success'], $quantity, $stockcode, $totalprice);
                     $this->successmsg[] = sprintf($lang[$loc]['virtualtrader']['buyshare_recount'], $newquantity, $stockcode);
@@ -309,7 +309,7 @@ class VirtualTrader
                         $query->execute();
                         $query->close();
                         
-                        $this->LogActivity($username, "STOCK_SELL", "Sold  {$quantity} {$stockcode} shares for {$totalprice} $ - New Quantity :  0 - Old Balance : {$db_balance} $ - New Balance : {$newbalance} $");
+                        $this->LogActivity($username, "VIRTUALTRADER_STOCK_SELL", "Sold  {$quantity} {$stockcode} shares for {$totalprice} $ - New Quantity :  0 - Old Balance : {$db_balance} $ - New Balance : {$newbalance} $");
                         
                         $this->successmsg[] = sprintf($lang[$loc]['virtualtrader']['sellshare_success'], $quantity, $stockcode, $totalprice);
                         $this->successmsg[] = sprintf($lang[$loc]['virtualtrader']['sellshare_recount'], 0, $stockcode);
@@ -330,7 +330,7 @@ class VirtualTrader
                         $query->execute();
                         $query->close();
                         
-                        $this->LogActivity($username, "STOCK_SELL", "Sold {$quantity} {$stockcode} shares for {$totalprice} $ - New Quantity : {$newquantity} - Old Balance : {$db_balance} $ - New Balance : {$newbalance} $");
+                        $this->LogActivity($username, "VIRTUALTRADER_STOCK_SELL", "Sold {$quantity} {$stockcode} shares for {$totalprice} $ - New Quantity : {$newquantity} - Old Balance : {$db_balance} $ - New Balance : {$newbalance} $");
                         
                         $this->successmsg[] = sprintf($lang[$loc]['virtualtrader']['sellshare_success'], $quantity, $stockcode, $totalprice);
                         $this->successmsg[] = sprintf($lang[$loc]['virtualtrader']['sellshare_recount'], $newquantity, $stockcode);

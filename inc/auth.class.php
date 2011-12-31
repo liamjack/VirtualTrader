@@ -71,7 +71,9 @@ class auth
                         
                         $attcount = $attcount + 1;
                         $remaincount = 5 - $attcount;
-                        
+						
+                        $this->LogActivity("UNKNOWN", "AUTH_LOGIN_FAIL", "Username / Password incorrect - {$username} / {$password}");
+						
                         $this->errormsg[] = sprintf($lang[$loc]['auth']['login_attempts_remaining'], $remaincount);
                         
                         return false;
@@ -84,6 +86,8 @@ class auth
                         {
                             // Account is not activated
                             
+							$this->LogActivity($username, "AUTH_LOGIN_FAIL", "Account inactive");
+							
                             $this->errormsg[] = $lang[$loc]['auth']['login_account_inactive'];
                             
                             return false;
@@ -92,7 +96,9 @@ class auth
                         {
                             // Account is activated
                         
-                            $this->newsession($username);                
+                            $this->newsession($username);   
+
+							$this->LogActivity($username, "AUTH_LOGIN_SUCCESS", "User logged in");
                     
                             $this->successmsg[] = $lang[$loc]['auth']['login_success'];
                             
@@ -159,6 +165,8 @@ class auth
                 {
                     // Username already exists
                 
+					$this->LogActivity("UNKNOWN", "AUTH_REGISTER_FAIL", "Username ({$username}) already exists");
+				
                     $this->errormsg[] = $lang[$loc]['auth']['register_username_exist'];
                     
                     return false;
@@ -178,6 +186,8 @@ class auth
                     {
                         // Email address is already used
                     
+						$this->LogActivity("UNKNOWN", "AUTH_REGISTER_FAIL", "Email ({$email}) already exists");
+					
                         $this->errormsg[] = $lang[$loc]['auth']['register_email_exist'];
                         
                         return false;                    
@@ -207,6 +217,8 @@ class auth
                         
                         mail($email, $message_subj, $message_cont, $message_head);
                     
+						$this->LogActivity($username, "AUTH_REGISTER_SUCCESS", "Account created and activation email sent");
+					
                         $this->successmsg[] = $lang[$loc]['auth']['register_success'];
                         
                         return true;                    
@@ -281,11 +293,14 @@ class auth
         $query->execute();
         $query->store_result();
         $count = $query->num_rows;
+		$query->fetch();
         $query->close();
         
         if($count == 0)
         {
             // Hash doesn't exist
+			
+			$this->LogActivity("UNKNOWN", "AUTH_LOGOUT", "User session cookie deleted - Database session not deleted - Hash ({$hash}) didn't exist");
         
             $this->errormsg[] = $lang[$loc]['auth']['deletesession_invalid'];
             
@@ -299,6 +314,8 @@ class auth
             $query->bind_param("s", $username);
             $query->execute();
             $query->close();
+			
+			$this->LogActivity($username, "AUTH_LOGOUT", "User session cookie deleted - Database session deleted - Hash ({$hash})");
             
             setcookie("auth_session", $hash, time() - 3600);
         }
@@ -329,6 +346,7 @@ class auth
             // Hash doesn't exist
         
             $this->errormsg[] = $lang[$loc]['auth']['sessioninfo_invalid'];
+			
             setcookie("auth_session", $hash, time() - 3600);
             
             return false;
@@ -363,6 +381,8 @@ class auth
             // Hash doesn't exist
             
             setcookie("auth_session", $hash, time() - 3600);
+			
+			$this->LogActivity($username, "AUTH_CHECKSESSION", "User session cookie deleted - Hash ({$hash}) didn't exist");
             
             return false;
         }
@@ -378,6 +398,8 @@ class auth
                 $query->close();
                 
                 setcookie("auth_session", $hash, time() - 3600);
+				
+				$this->LogActivity($username, "AUTH_CHECKSESSION", "User session cookie deleted - IP Different ( DB : {$db_ip} / Current : " . $_SERVER['REMOTE_ADDR'] . " )");
                 
                 return false;
             }
@@ -396,6 +418,8 @@ class auth
                     $query->close();
                     
                     setcookie("auth_session", $hash, time() - 3600);
+					
+					$this->LogActivity($username, "AUTH_CHECKSESSION", "User session cookie deleted - Session expired ( Expire date : {$db_expiredate} )");
                     
                     return false;
                 }
@@ -465,8 +489,10 @@ class auth
             {
                 // User doesn't exist
                 
+				$this->LogActivity("UNKNOWN", "AUTH_ACTIVATE_FAIL", "Username Incorrect : {$username}");				
+				
                 $this->errormsg[] = $lang[$loc]['auth']['activate_username_incorrect'];
-                
+				
                 return false;
             }
             else
@@ -477,8 +503,10 @@ class auth
                 {
                     // Account is already activated
                     
+					$this->LogActivity($username, "AUTH_ACTIVATE_FAIL", "Account already activated");					
+					
                     $this->errormsg[] = $lang[$loc]['auth']['activate_account_activated'];
-                    
+					
                     return true;
                 }
                 else
@@ -497,14 +525,18 @@ class auth
                         $query->execute();
                         $query->close();
                         
+						$this->LogActivity($username, "AUTH_ACTIVATE_SUCCESS", "Activation successful. Key Entry deleted.");						
+						
                         $this->successmsg[] = $lang[$loc]['auth']['activate_success'];
-                        
+
                         return true;                        
                     }
                     else
                     {
                         // Activation Keys don't match
                         
+						$this->LogActivity($username, "AUTH_ACTIVATE_FAIL", "Activation keys don't match ( DB : {$activekey} / Given : {$key} )");						
+						
                         $this->errormsg[] = $lang[$loc]['auth']['activate_key_incorrect'];
                         
                         return false;
@@ -556,8 +588,10 @@ class auth
             
             if($count == 0)
             {
-                $this->errormsg[] = $lang[$loc]['auth']['changepass_username_incorrect'];
-                
+				$this->LogActivity("UNKNOWN", "AUTH_CHANGEPASS_FAIL", "Username Incorrect ({$username})");                
+				
+				$this->errormsg[] = $lang[$loc]['auth']['changepass_username_incorrect'];
+
                 return false;
             }
             else 
@@ -569,14 +603,18 @@ class auth
                     $query->execute();
                     $query->close();
                     
+					$this->LogActivity($username, "AUTH_CHANGEPASS_SUCCESS", "Password changed");					
+					
                     $this->successmsg[] = $lang[$loc]['auth']['changepass_success'];
-                    
+					
                     return true;
                 }
                 else 
                 {
-                    $this->errormsg[] = $lang[$loc]['auth']['changepass_currpass_incorrect'];
-                    
+					$this->LogActivity($username, "AUTH_CHANGEPASS_FAIL", "Current Password Incorrect ( DB : {$db_currpass} / Given : {$currpass} )");                    
+					
+					$this->errormsg[] = $lang[$loc]['auth']['changepass_currpass_incorrect'];
+					                  
                     return false;
                 }
             }
@@ -620,7 +658,9 @@ class auth
             
             if($count == 0)
             {
-                $this->errormsg[] = $lang[$loc]['auth']['changeemail_username_incorrect'];
+				$this->LogActivity("UNKNOWN", "AUTH_CHANGEEMAIL_FAIL", "Username Incorrect ({$username})");                
+				
+				$this->errormsg[] = $lang[$loc]['auth']['changeemail_username_incorrect'];
                 
                 return false;
             }
@@ -628,7 +668,9 @@ class auth
             {
                 if($email == $db_email)
                 {
-                    $this->errormsg[] = $lang[$loc]['auth']['changeemail_email_match'];
+ 					$this->LogActivity($username, "AUTH_CHANGEEMAIL_FAIL", "Old and new email matched ({$email})");                   
+					
+					$this->errormsg[] = $lang[$loc]['auth']['changeemail_email_match'];
                     
                     return false;
                 }
@@ -639,6 +681,8 @@ class auth
                     $query->execute();
                     $query->close();
                     
+					$this->LogActivity($username, "AUTH_CHANGEEMAIL_SUCCESS", "Email changed from {$db_email} to {$email}");					
+					
                     $this->successmsg[] = $lang[$loc]['auth']['changeemail_success'];
                     
                     return true;
@@ -702,7 +746,9 @@ class auth
                     
                     $attcount = $attcount + 1;
                     $remaincount = 5 - $attcount;
-                        
+                       
+					$this->LogActivity("UNKNOWN", "AUTH_RESETPASS_FAIL", "Email incorrect ({$email})");
+					   
                     $this->errormsg[] = sprintf($lang[$loc]['auth']['resetpass_attempts_remaining'], $remaincount);
                         
                     $this->addattempt($_SERVER['REMOTE_ADDR']);
@@ -728,6 +774,8 @@ class auth
                         
                     mail($email, $message_subj, $message_cont, $message_head);
                     
+					$this->LogActivity($username, "AUTH_RESETPASS_SUCCESS", "Reset pass request sent to {$email} ( Key : {$resetkey} )");
+					
                     $this->successmsg[] = $lang[$loc]['auth']['resetpass_email_sent'];
                         
                     return true;
@@ -764,6 +812,8 @@ class auth
                         $attcount = $attcount + 1;
                         $remaincount = 5 - $attcount;
                         
+						$this->LogActivity("UNKNOWN", "AUTH_RESETPASS_FAIL", "Username incorrect ({$username})");						
+						
                         $this->errormsg[] = sprintf($lang[$loc]['auth']['resetpass_attempts_remaining'], $remaincount);
                         
                         $this->addattempt($_SERVER['REMOTE_ADDR']);
@@ -783,6 +833,8 @@ class auth
                             $query->execute();
                             $query->close();
                             
+							$this->LogActivity($username, "AUTH_RESETPASS_SUCCESS", "Password reset - Key reset");							
+							
                             $this->successmsg[] = $lang[$loc]['auth']['resetpass_success'];
                             
                             return true;
@@ -794,10 +846,12 @@ class auth
                             $attcount = $attcount + 1;
                             $remaincount = 5 - $attcount;
                         
+							$this->LogActivity($username, "AUTH_RESETPASS_FAIL", "Key Incorrect ( DB : {$db_key} / Given : {$key} )");						
+						
                             $this->errormsg[] = sprintf($lang[$loc]['auth']['resetpass_attempts_remaining'], $remaincount);
                         
                             $this->addattempt($_SERVER['REMOTE_ADDR']);
-                        
+ 
                             return false;
                         }
                     }
@@ -819,39 +873,77 @@ class auth
     
     function checkresetkey($username, $key)
     {
-        if(strlen($username) == 0) { return false; }
-        elseif(strlen($username) > 30) { return false; }
-        elseif(strlen($username) < 3) { return false; }
-        elseif(strlen($key) == 0) { return false; }
-        elseif(strlen($key) < 15) { return false; }
-        elseif(strlen($key) > 15) { return false; }
-        else
-        {
-            $query = $this->mysqli->prepare("SELECT resetkey FROM users WHERE username=?");
-            $query->bind_param("s", $username);
-            $query->bind_result($db_key);
-            $query->execute();
-            $query->store_result();
-            $count = $query->num_rows;
-            $query->fetch();
-            $query->close();
+		include("config.php");
+		include("lang.php");
+		
+		$attcount = $this->getattempt($_SERVER['REMOTE_ADDR']);
             
-            if($count == 0)
-            {
-                return false;
-            }
-            else
-            {
-                if($key == $db_key)
-                {
-                    return true;
-                }
-                else
-                {
-                    return false;
-                }
-            }
+        if($attcount >= 5)
+        {
+            $this->errormsg[] = $lang[$loc]['auth']['resetpass_lockedout'];
+            $this->errormsg[] = $lang[$loc]['auth']['resetpass_wait30'];
+                
+            return false;
         }
+		else
+		{
+		
+			if(strlen($username) == 0) { return false; }
+			elseif(strlen($username) > 30) { return false; }
+			elseif(strlen($username) < 3) { return false; }
+			elseif(strlen($key) == 0) { return false; }
+			elseif(strlen($key) < 15) { return false; }
+			elseif(strlen($key) > 15) { return false; }
+			else
+			{
+				$query = $this->mysqli->prepare("SELECT resetkey FROM users WHERE username=?");
+				$query->bind_param("s", $username);
+				$query->bind_result($db_key);
+				$query->execute();
+				$query->store_result();
+				$count = $query->num_rows;
+				$query->fetch();
+				$query->close();
+				
+				if($count == 0)
+				{
+					$this->LogActivity("UNKNOWN", "AUTH_CHECKRESETKEY_FAIL", "Username doesn't exist ({$username})");
+						
+					$this->addattempt($_SERVER['REMOTE_ADDR']);
+						
+					$this->errormsg[] = $lang[$loc]['auth']['checkresetkey_username_incorrect'];
+						
+					$attcount = $attcount + 1;
+                    $remaincount = 5 - $attcount;
+						
+                    $this->errormsg[] = sprintf($lang[$loc]['auth']['checkresetkey_attempts_remaining'], $remaincount);
+				
+					return false;
+				}
+				else
+				{
+					if($key == $db_key)
+					{
+						return true;
+					}
+					else
+					{
+						$this->LogActivity($username, "AUTH_CHECKRESETKEY_FAIL", "Key provided is different to DB key ( DB : {$db_key} / Given : {$key} )");
+						
+						$this->addattempt($_SERVER['REMOTE_ADDR']);
+						
+						$this->errormsg[] = $lang[$loc]['auth']['checkresetkey_key_incorrect'];
+						
+						$attcount = $attcount + 1;
+                        $remaincount = 5 - $attcount;
+						
+                        $this->errormsg[] = sprintf($lang[$loc]['auth']['checkresetkey_attempts_remaining'], $remaincount);
+					
+						return false;
+					}
+				}
+			}
+		}
     }
     
     /*
@@ -888,7 +980,9 @@ class auth
             
             if($count == 0)
             {
-                $this->errormsg[] = $lang[$loc]['auth']['deleteaccount_username_incorrect'];
+				$this->LogActivity("UNKNOWN", "AUTH_DELETEACCOUNT_FAIL", "Username Incorrect ({$username})");                
+				
+				$this->errormsg[] = $lang[$loc]['auth']['deleteaccount_username_incorrect'];
                 
                 return false;
             }
@@ -906,14 +1000,18 @@ class auth
                     $query->execute();
                     $query->close();
                     
-                    $this->successmsg[] = $lang[$loc]['auth']['deleteaccount_success'];
+					$this->LogActivity($username, "AUTH_DELETEACCOUNT_SUCCESS", "Account deleted - Sessions deleted");                    
+					
+					$this->successmsg[] = $lang[$loc]['auth']['deleteaccount_success'];
                     
                     return true;
                 }
                 else 
                 {
-                    $this->errormsg[] = $lang[$loc]['auth']['deleteaccount_password_incorrect'];
-                    
+					$this->LogActivity($username, "AUTH_DELETEACCOUNT_FAIL", "Password incorrect ( DB : {$db_password} / Given : {$password} )");                    
+					
+					$this->errormsg[] = $lang[$loc]['auth']['deleteaccount_password_incorrect'];
+               
                     return false;
                 }
             }
@@ -1019,6 +1117,44 @@ class auth
                     $query2->close();
                 }
             }
+        }
+    }
+	
+	/*
+    * Logs users actions on the site to database for future viewing
+    * @param string $username
+    * @param string $action
+    * @param string $additionalinfo
+    * @return boolean
+    */
+	
+	function LogActivity($username, $action, $additionalinfo = "none")
+    {
+		include("config.php");
+		include("lang.php");
+	
+        if(strlen($username) == 0) { $this->errormsg[] = $lang[$loc]['auth']['logactivity_username_empty']; return false; }
+        elseif(strlen($username) < 3) { $this->errormsg[] = $lang[$loc]['auth']['logactivity_username_short']; return false; }
+        elseif(strlen($username) > 30) { $this->errormsg[] = $lang[$loc]['auth']['logactivity_username_long']; return false; }
+        
+        if(strlen($action) == 0) { $this->errormsg[] = $lang[$loc]['auth']['logactivity_action_empty']; return false; }
+        elseif(strlen($action) < 3) { $this->errormsg[] = $lang[$loc]['auth']['logactivity_action_short']; return false; }
+        elseif(strlen($action) > 100) { $this->errormsg[] = $lang[$loc]['auth']['logactivity_action_long']; return false; }
+        
+        if(strlen($additionalinfo) == 0) { $additionalinfo = "none"; }
+        elseif(strlen($additionalinfo) > 500) { $this->errormsg[] = $lang[$loc]['auth']['logactivity_addinfo_long']; return false; }
+        
+        if(count($this->errormsg) == 0)
+        {
+            $ip = $_SERVER['REMOTE_ADDR'];
+            $date = date("Y-m-d H:i:s");
+            
+            $query = $this->mysqli->prepare("INSERT INTO activitylog (date, username, action, additionalinfo, ip) VALUES (?, ?, ?, ?, ?)");
+            $query->bind_param("sssss", $date, $username, $action, $additionalinfo, $ip);
+            $query->execute();
+            $query->close();
+            
+            return true;
         }
     }
 

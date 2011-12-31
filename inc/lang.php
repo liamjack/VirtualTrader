@@ -100,6 +100,12 @@ $lang['en']['auth']['resetpass_username_incorrect'] = "Error encountered !";
 $lang['en']['auth']['resetpass_success'] = "Password successfully changed !";
 $lang['en']['auth']['resetpass_key_incorrect'] = "Reset Key is incorrect !";
 
+$lang['en']['auth']['checkresetkey_username_incorrect'] = "Username is incorrect !";
+$lang['en']['auth']['checkresetkey_key_incorrect'] = "Reset Key is incorrect !";
+$lang['en']['auth']['checkresetkey_lockedout'] = "You have been temporarily locked out !";
+$lang['en']['auth']['checkresetkey_wait30'] = "Please wait 30 mins.";
+$lang['en']['auth']['checkresetkey_attempts_remaining'] = "%d attempts remaining !";
+
 $lang['en']['auth']['deleteaccount_username_empty'] = "Error encountered !";
 $lang['en']['auth']['deleteaccount_username_short'] = "Error encountered !";
 $lang['en']['auth']['deleteaccount_username_long'] = "Error encountered !";
@@ -109,6 +115,14 @@ $lang['en']['auth']['deleteaccount_password_long'] = "Password is too long !";
 $lang['en']['auth']['deleteaccount_username_incorrect'] = "Error encountered !";
 $lang['en']['auth']['deleteaccount_success'] = "Account deleted successfully !";
 $lang['en']['auth']['deleteaccount_password_incorrect'] = "Password is incorrect !";
+
+$lang['en']['auth']['logactivity_username_empty'] = "Error encountered !";
+$lang['en']['auth']['logactivity_username_short'] = "Error encountered !";
+$lang['en']['auth']['logactivity_username_long'] = "Error encountered !";
+$lang['en']['auth']['logactivity_action_empty'] = "Error encountered !";
+$lang['en']['auth']['logactivity_action_short'] = "Error encountered !";
+$lang['en']['auth']['logactivity_action_long'] = "Error encountered !";
+$lang['en']['auth']['logactivity_addinfo_long'] = "Error encountered !";
 
 $lang['en']['virtualtrader']['buyshare_stockcode_empty'] = "Error encountered !";
 $lang['en']['virtualtrader']['buyshare_stockcode_long'] = "Error encountered !";
@@ -217,7 +231,7 @@ $lang['fr']['auth']['changeemail_success'] = "Adresse Email changé !";
 
 $lang['fr']['auth']['resetpass_lockedout'] = "Vous avez été temporairement bloqué !";
 $lang['fr']['auth']['resetpass_wait30'] = "Veuillez attendre 30 minutes.";
-$lang['fr']['auth']['resetpass_email_empty'] = "CHamp Email vide !";
+$lang['fr']['auth']['resetpass_email_empty'] = "Champ Email vide !";
 $lang['fr']['auth']['resetpass_email_short'] = "Email trop court !";
 $lang['fr']['auth']['resetpass_email_long'] = "Email trop long !";
 $lang['fr']['auth']['resetpass_email_invalid'] = "Email invalide !";
@@ -236,6 +250,12 @@ $lang['fr']['auth']['resetpass_username_incorrect'] = "Erreur rencontrée !";
 $lang['fr']['auth']['resetpass_success'] = "Mot de passe changé !";
 $lang['fr']['auth']['resetpass_key_incorrect'] = "Clé de réinitialisation incorrecte !";
 
+$lang['fr']['auth']['checkresetkey_username_incorrect'] = "Nom d'utilisateur incorrect !";
+$lang['fr']['auth']['checkresetkey_key_incorrect'] = "Clé de réinitialisation incorrecte !";
+$lang['fr']['auth']['checkresetkey_lockedout'] = "Vous avez été temporairement bloqué !";
+$lang['fr']['auth']['checkresetkey_wait30'] = "Veuillez attendre 30 minutes.";
+$lang['fr']['auth']['checkresetkey_attempts_remaining'] = "%d tentatives restantes !";
+
 $lang['fr']['auth']['deleteaccount_username_empty'] = "Erreur rencontrée !";
 $lang['fr']['auth']['deleteaccount_username_short'] = "Erreur rencontrée !";
 $lang['fr']['auth']['deleteaccount_username_long'] = "Erreur rencontrée !";
@@ -245,6 +265,14 @@ $lang['fr']['auth']['deleteaccount_password_long'] = "Mot de passe trop long !";
 $lang['fr']['auth']['deleteaccount_username_incorrect'] = "Erreur rencontrée !";
 $lang['fr']['auth']['deleteaccount_success'] = "Compte supprimé !";
 $lang['fr']['auth']['deleteaccount_password_incorrect'] = "Mot de passe incorrect !";
+
+$lang['fr']['auth']['logactivity_username_empty'] = "Erreur rencontrée !";
+$lang['fr']['auth']['logactivity_username_short'] = "Erreur rencontrée !";
+$lang['fr']['auth']['logactivity_username_long'] = "Erreur rencontrée !";
+$lang['fr']['auth']['logactivity_action_empty'] = "Erreur rencontrée !";
+$lang['fr']['auth']['logactivity_action_short'] = "Erreur rencontrée !";
+$lang['fr']['auth']['logactivity_action_long'] = "Erreur rencontrée !";
+$lang['fr']['auth']['logactivity_addinfo_long'] = "Erreur rencontrée !";
 
 $lang['fr']['virtualtrader']['buyshare_stockcode_empty'] = "Erreur rencontrée !";
 $lang['fr']['virtualtrader']['buyshare_stockcode_long'] = "Erreur rencontrée !";

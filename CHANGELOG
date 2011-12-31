@@ -1,6 +1,7 @@
+31.12.2011 - Rev 19 - Added Logging functionality to Auth Class. Added class name definition in "Action". Added attempts to checkresetkey which could be bruteforced.
 29.12.2011 - Rev 18 - Fixed selling error
 29.12.2011 - Rev 17 - Added CHANGELOG
-28.12.2011 - Rev 16 - Forgot to close <?php tags
+28.12.2011 - Rev 16 - Forgot to close php tags
 28.12.2011 - Rev 15 - Fixed Current Languages list in lang.php
 28.12.2011 - Rev 14 - Translated into French
 28.12.2011 - Rev 13 - Created Language System. Added Error / Success messages for Auth and VT Class. Updated Classes
