@@ -54,6 +54,10 @@ switch ($page)
         include("pages/stocks.php");
         break;
         
+    case 'mystocks' :
+        include("pages/mystocks.php");
+        break;
+        
     case 'stockinfo' :
         include("pages/stockinfo.php");
         break;

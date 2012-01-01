@@ -31,7 +31,7 @@ class VirtualTrader
         $stockinfo['code'] = $finance[0]->symbol['data']; // Stock code name (ex: GOOG)
         $stockinfo['name'] = $finance[0]->company['data']; // Stock Company Name (ex: Google Inc.)
         $stockinfo['exchange'] = $finance[0]->exchange['data']; // Stock Exchange name (ex: Nasdaq)
-        $stockinfo['price'] = round($finance[0]->last['data'], 2); // Stock price
+        $stockinfo['price'] = $finance[0]->last['data']; // Stock price
         $stockinfo['diff'] = $finance[0]->change['data']; // Stock Difference
         $stockinfo['diff_perc'] = $finance[0]->perc_change['data']; // Stock difference in percent
         
@@ -136,7 +136,7 @@ class VirtualTrader
                 
                 $stockinfo = $this->GetStockInfo($stockcode);
                 
-                $totalprice = round($quantity * $stockinfo['price'], 2);
+                $totalprice = $quantity * $stockinfo['price'];
                 
                 $query = $this->mysqli->prepare("SELECT balance FROM users WHERE username=?");
                 $query->bind_param("s", $username);
@@ -158,7 +158,7 @@ class VirtualTrader
                     $query->close();
                     
                     $query = $this->mysqli->prepare("INSERT INTO userstocks (code, username, quantity, p_price) VALUES (?, ?, ?, ?)");
-                    $query->bind_param("ssdd", $stockcode, $username, $newquantity, $stockinfo['price']);
+                    $query->bind_param("ssid", $stockcode, $username, $newquantity, $stockinfo['price']);
                     $query->execute();
                     $query->close();
                     
@@ -180,7 +180,7 @@ class VirtualTrader
             
                 $stockinfo = $this->GetStockInfo($stockcode);
                 
-                $totalprice = round($quantity * $stockinfo['price'], 2);
+                $totalprice = $quantity * $stockinfo['price'];
                 
                 $query = $this->mysqli->prepare("SELECT balance FROM users WHERE username=?");
                 $query->bind_param("s", $username);
@@ -284,7 +284,7 @@ class VirtualTrader
                     
                     $stockinfo = $this->GetStockInfo($stockcode);
                 
-                    $totalprice = round($quantity * $stockinfo['price'], 2);
+                    $totalprice = $quantity * $stockinfo['price'];
                     
                     $query = $this->mysqli->prepare("SELECT balance FROM users WHERE username=?");
                     $query->bind_param("s", $username);
@@ -493,6 +493,116 @@ class VirtualTrader
         $table .= $numbering;
         
         return $table;
+    }
+    
+    /*
+    * Returns a list of stocks that the user owns based on username
+    * @param string $username
+    * @param int $page
+    * @param int $amount (Amount of results to display per page)
+    * @return string $table
+    */
+    
+    function ListUserStocks($username, $page = 1, $amount = 10)
+    {
+        if(!is_int($page)) { $page = 1; $mysqlpage = 0; } else { $mysqlpage = $page * 10 - 10; }
+        if(!is_int($amount)) { $amount = 10; }       
+        
+        $query = $this->mysqli->prepare("SELECT * FROM userstocks WHERE username=?");
+        $query->bind_param("s", $username);
+        $query->execute();
+        $query->store_result();
+        $count = $query->num_rows;
+        $query->close();
+        
+        $totalpage = ceil($count / $amount);
+        
+        $i = 1;
+        $numbering = "";
+
+        while($i <= $totalpage)
+        {
+            if($i == $page) { $numbering .= " <a href=\"?page=mystocks&pn=$i\">[$i]</a> "; }
+            else { $numbering .= " <a href=\"?page=mystocks&pn=$i\">$i</a> "; }
+            $i++;
+        }
+        
+        $query = $this->mysqli->prepare("SELECT code, quantity, p_price FROM userstocks WHERE username=? LIMIT ?,?");
+        $query->bind_param("sii", $username, $mysqlpage, $amount);
+        $query->bind_result($stockcode, $stockquantity, $stockp_price);
+        $query->execute();
+        $query->store_result();
+        $count = $query->num_rows;
+        
+        if($count > 0)
+        {
+            $table = '<table width="95%" border="0" cellspacing="3" cellpadding="3"><tr>
+                        <td width="30%" height="50"><b>Stock Name :</b></td>
+                        <td width="15%"><b>Stock Code :</b></td>
+                        <td width="15%"><b>Previous Price :</b></td>
+                <td width="20%"><b>Current Price :</b></td>
+                <td width="7%"><b>Qty :</b></td>
+                        <td width="3%">&nbsp;</td>
+                      </tr>';
+        
+            while($query->fetch())
+            {
+                $stockinfo = $this->GetStockInfo($stockcode);
+                
+                $stockp_price = round($stockp_price, 2);
+                $stockc_price = round($stockinfo['price'], 2);
+                
+                $stockname = $stockinfo['name'];
+                
+            
+                $table .= "<tr>
+                            <td>{$stockname}</td>
+                            <td>{$stockcode}</td>
+                            <td>{$stockp_price} $</td>
+                            <td>{$stockc_price} $</td>
+                            <td>{$stockquantity}</td>
+                            <td><a href=\"?page=stockinfo&code={$stockcode}\"><img src=\"images/info.png\" /></a></td>
+                            </tr>";
+            }
+            
+            $table .= "</table>";
+        }
+        else
+        {
+            $table = "0 stocks found !";
+        }
+        
+        $table .= "<br/><br/>";
+        $table .= $numbering;
+        
+        return $table;
+    }
+    
+    /*
+    * Function that returns the user's balance
+	* @param string $username
+	* @return double $balance
+	*/
+    
+    function GetUserBalance($username)
+    {
+    	$query = $this->mysqli->prepare("SELECT balance FROM users WHERE username=?");
+    	$query->bind_param("s", $username);
+    	$query->bind_result($balance);
+    	$query->execute();
+    	$query->store_result();
+    	$count = $query->num_rows;
+    	$query->fetch();
+    	$query->close();
+    	
+    	if($count == 0)
+    	{
+    		return false;
+    	}
+    	else
+    	{
+    		return $balance;
+    	}
     }
 }
 

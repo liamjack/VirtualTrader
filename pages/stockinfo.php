@@ -34,16 +34,24 @@ else
        
         $content = "<center><img src=\"http://chart.finance.yahoo.com/z?s={$stockcode}&t=5d&q=&l=&z=m&a=v&p=s\" /></center>";
         $content .= "<br/><br/>";
-        $content .= "Stock Name : " . $stockinfo['name'] . "<br/>";
+        $content .= "Company Name : " . $stockinfo['name'] . "<br/>";
         $content .= "Exchange : " . $stockinfo['exchange'] . "<br/><br/>";
-        $content .= "Stock Price : " . $stockinfo['price'] . " $<br/>";
-        $content .= "Price Difference : " . $stockinfo['diff'] . " (" . $stockinfo['diff_perc'] . ")<br/><br/>";
+        $content .= "Share Price : " . $stockinfo['price'] . " $<br/>";
+        $content .= "Price Difference : " . $stockinfo['diff'] . " $ (" . $stockinfo['diff_perc'] . " %)<br/><br/>";
 		
 		if($virtualtrader->ShareQty($session['username'], $stockcode) > 0)
-		{
+		{		
 			$qty = $virtualtrader->ShareQty($session['username'], $stockcode);
 			$ttlvalue = $qty * $stockinfo['price'];
-			$content .= "<br/>You have {$qty} {$stockcode} shares, which are currently worth {$ttlvalue} $ .<br/><br/>";
+			
+			if($qty == 1)
+			{
+				$content .= "<br/>You have {$qty} {$stockcode} share, which is currently worth {$ttlvalue} $ .<br/><br/>";
+			}
+			else
+			{
+				$content .= "<br/>You have {$qty} {$stockcode} shares, which are currently worth {$ttlvalue} $ .<br/><br/>";
+			}
 		}
 		else
 		{

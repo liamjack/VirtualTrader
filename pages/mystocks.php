@@ -16,12 +16,11 @@ else
 
 if($_GET['pn']) { $page = (int) $_GET['pn']; }
 
-$table = $virtualtrader->ListStocks($page, $amount = 10, $exchange = 1);
-
 $session = $auth->sessioninfo($_COOKIE['auth_session']);
 
+$table = $virtualtrader->ListUserStocks($session['username'], $page, $amount = 10);
 
-$title = 'Stock List';
+$title = 'My Stock List';
 
 $content = $table;
 

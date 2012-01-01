@@ -1169,6 +1169,7 @@ class auth
         $password = hash("SHA512", base64_encode(hash("SHA512", $password)));
         return $password;
     }
+	
 }
 
 ?>
