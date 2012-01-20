@@ -4,10 +4,10 @@
 // MySQL Configuration :
 // ------------------------
 
-$db['host'] = "mysql.binhoster.com";
-$db['user'] = "u667856163_vt";
-$db['pass'] = "T3H-1337-B0AT";
-$db['name'] = "u667856163_vt";
+$db['host'] = "*********";
+$db['user'] = "*********";
+$db['pass'] = "*********";
+$db['name'] = "*********";
 
 // ------------------------
 // Auth Configuration :
