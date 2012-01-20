@@ -1,17 +1,25 @@
 <?php
 
-$db_host = "localhost";
-$db_user = "*****";
-$db_pass = "*****";
-$db_name = "virtualtrader";
+// ------------------------
+// MySQL Configuration :
+// ------------------------
 
-// URL to root of VirtualTrader Installation WITH trailing slash ( Ex: http://www.google.com/ ) :
-$vturl = "http://vt-beta.cuonic.tk/";
+$db['host'] = "mysql.binhoster.com";
+$db['user'] = "u667856163_vt";
+$db['pass'] = "T3H-1337-B0AT";
+$db['name'] = "u667856163_vt";
 
-// Email address to display in Message From ( Ex: no-reply@cuonic.tk )
-$vtemail = "virtualtrader@cuonic.tk";
+// ------------------------
+// Auth Configuration :
+// ------------------------
 
-// Language of error messages
-$loc = "en";
+$auth_conf['site_name'] = "VirtualTrader"; // Name of website to appear in emails
+$auth_conf['email_from'] = "no-reply@vt-beta.cuonic.tk"; // Email FROM address for Auth emails (Activation, password reset...)
+$auth_conf['max_attempts'] = 5; // INT : Max number of attempts for login before user is locked out
+$auth_conf['base_url'] = "http://vt-beta.cuonic.tk/"; // URL to Getcours installation root WITH trailing slash
+
+$loc = "en"; // Language of Auth Class output : en / fr
 
 ?>
+
+

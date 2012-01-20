@@ -10,7 +10,7 @@ class VirtualTrader
     {
         include("config.php");
         
-        $this->mysqli = new mysqli($db_host, $db_user, $db_pass, $db_name);
+        $this->mysqli = new mysqli($db['host'], $db['user'], $db['pass'], $db['name']);
     }
     
     function GetStockInfo($stockcode)
