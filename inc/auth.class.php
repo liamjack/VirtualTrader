@@ -204,18 +204,17 @@ class auth
 						// Email address isn't already used
 					
 						$password = $this->hashpass($password);
-						$activekey = $this->randomkey(15);
-						$balance = 200.00;		 
+						$activekey = $this->randomkey(15);	 
 					
-						$query = $this->mysqli->prepare("INSERT INTO users (username, password, email, activekey, balance) VALUES (?, ?, ?, ?, ?)");
-						$query->bind_param("ssssd", $username, $password, $email, $activekey, $balance);
+						$query = $this->mysqli->prepare("INSERT INTO users (username, password, email, activekey) VALUES (?, ?, ?, ?)");
+						$query->bind_param("ssss", $username, $password, $email, $activekey);
 						$query->execute();
 						$query->close();
 						
 						$message_from = $auth_conf['email_from'];
 						$message_subj = $auth_conf['site_name'] . " - Account activation required !";
 						$message_cont = "Hello {$username}<br/><br/>";
-						$message_cont .= "You recently registered a new account on VirtualTrader<br/>";
+						$message_cont .= "You recently registered a new account on " . $auth_conf['site_name'] . "<br/>";
 						$message_cont .= "To activate your account please click the following link<br/><br/>";
 						$message_cont .= "<b><a href=\"" . $auth_conf['base_url'] . "?page=activate&username={$username}&key={$activekey}\">Activate my account</a></b>";
 						$message_head = "From: {$message_from}" . "\r\n";
@@ -254,6 +253,8 @@ class auth
 	
 	function newsession($username)
 	{
+		include("config.php");
+	
 		$hash = md5(microtime());
 		
 		// Fetch User ID :		
@@ -273,7 +274,7 @@ class auth
 		$query->close();
 		
 		$ip = $_SERVER['REMOTE_ADDR'];
-		$expiredate = date("Y-m-d H:i:s", strtotime("+1 hour"));
+		$expiredate = date("Y-m-d H:i:s", strtotime($auth_conf['session_duration']));
 		$expiretime = strtotime($expiredate);
 		
 		$query = $this->mysqli->prepare("INSERT INTO sessions (uid, username, hash, expiredate, ip) VALUES (?, ?, ?, ?, ?)");
@@ -772,7 +773,7 @@ class auth
 					$message_from = $auth_conf['email_from'];
 					$message_subj = $auth_conf['site_name'] . " - Password reset request !";
 					$message_cont = "Hello {$username}<br/><br/>";
-					$message_cont .= "You recently requested a password reset on VirtualTrader<br/>";
+					$message_cont .= "You recently requested a password reset on " . $auth_conf['site_name'] . "<br/>";
 					$message_cont .= "To proceed with the password reset, please click the following link :<br/><br/>";
 					$message_cont .= "<b><a href=\"" . $auth_conf['base_url'] . "?page=forgot&username={$username}&key={$resetkey}\">Reset My Password</a></b>";
 					$message_head = "From: {$message_from}" . "\r\n";
@@ -1036,6 +1037,8 @@ class auth
 	
 	function addattempt($ip)
 	{
+		include("config.php");
+	
 		$query = $this->mysqli->prepare("SELECT count FROM attempts WHERE ip = ?");
 		$query->bind_param("s", $ip);
 		$query->bind_result($attempt_count);
@@ -1049,7 +1052,7 @@ class auth
 		{
 			// No record of this IP in attempts table already exists, create new
 			
-			$attempt_expiredate = date("Y-m-d H:i:s", strtotime("+30 minutes"));
+			$attempt_expiredate = date("Y-m-d H:i:s", strtotime($auth_conf['security_duration']));
 			$attempt_count = 1;
 			
 			$query = $this->mysqli->prepare("INSERT INTO attempts (ip, count, expiredate) VALUES (?, ?, ?)");
@@ -1061,7 +1064,7 @@ class auth
 		{
 			// IP Already exists in attempts table, add 1 to current count
 			
-			$attempt_expiredate = date("Y-m-d H:i:s", strtotime("+30 minutes"));
+			$attempt_expiredate = date("Y-m-d H:i:s", strtotime($auth_conf['security_duration']));
 			$attempt_count = $attempt_count + 1;
 			
 			$query = $this->mysqli->prepare("UPDATE attempts SET count=?, expiredate=? WHERE ip=?");
@@ -1166,17 +1169,18 @@ class auth
 	}
 
 	/*
-	* Hash user's password with SHA512 and base64_encode
+	* Hash user's password with SHA512, base64_encode, ROT13 and salts !
 	* @param string $password
 	* @return string $password
 	*/
 	
 	function hashpass($password)
 	{
-		$password = hash("SHA512", base64_encode(hash("SHA512", $password)));
+		include("config.php");
+	
+		$password = hash("SHA512", base64_encode(str_rot13(hash("SHA512", str_rot13($auth_conf['salt_1'] . $password . $auth_conf['salt_2'])))));
 		return $password;
 	}
-	
 }
 
 ?>
