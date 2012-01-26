@@ -1,3 +1,8 @@
+26.01.2012 - Rev 24 - Updated CHANGELOG
+26.01.2012 - Rev 23 - Updated Auth Class version, removed deprecated elements
+20.01.2012 - Rev 22 - Fixes
+20.01.2012 - Rev 21 - Updated to latest Auth Class Version
+01.12.2012 - Rev 20 - Added "My Stocks" lists, fixed bugs
 31.12.2011 - Rev 19 - Added Logging functionality to Auth Class. Added class name definition in "Action". Added attempts to checkresetkey which could be bruteforced.
 29.12.2011 - Rev 18 - Fixed selling error
 29.12.2011 - Rev 17 - Added CHANGELOG
