@@ -198,9 +198,10 @@ class auth
 					
 						$password = $this->hashpass($password);
 						$activekey = $this->randomkey(15);	 
-					
-						$query = $this->mysqli->prepare("INSERT INTO users (username, password, email, activekey) VALUES (?, ?, ?, ?)");
-						$query->bind_param("ssss", $username, $password, $email, $activekey);
+						$balance = 200.00;
+						
+						$query = $this->mysqli->prepare("INSERT INTO users (username, password, email, activekey, balance) VALUES (?, ?, ?, ?, ?)");
+						$query->bind_param("ssssd", $username, $password, $email, $activekey, $balance);
 						$query->execute();
 						$query->close();
 						

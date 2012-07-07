@@ -31,9 +31,9 @@ class VirtualTrader
         $stockinfo['code'] = $finance[0]->symbol['data']; // Stock code name (ex: GOOG)
         $stockinfo['name'] = $finance[0]->company['data']; // Stock Company Name (ex: Google Inc.)
         $stockinfo['exchange'] = $finance[0]->exchange['data']; // Stock Exchange name (ex: Nasdaq)
-        $stockinfo['price'] = $finance[0]->last['data']; // Stock price
-        $stockinfo['diff'] = $finance[0]->change['data']; // Stock Difference
-        $stockinfo['diff_perc'] = $finance[0]->perc_change['data']; // Stock difference in percent
+        $stockinfo['price'] = floatval($finance[0]->last['data']); // Stock price
+        $stockinfo['diff'] = floatval($finance[0]->change['data']); // Stock Difference
+        $stockinfo['diff_perc'] = floatval($finance[0]->perc_change['data']); // Stock difference in percent
         
         return $stockinfo;
     }
@@ -116,9 +116,9 @@ class VirtualTrader
         if(strlen($username) == 0) { $this->errormsg[] = $lang[$loc]['virtualtrader']['buyshare_username_empty']; return false; }
         elseif(strlen($username) < 3) { $this->errormsg[] = $lang[$loc]['virtualtrader']['buyshare_username_short']; return false; }
         elseif(strlen($username) > 30) { $this->errormsg[] = $lang[$loc]['virtualtrader']['buyshare_username_long']; return false; }
-        
-        $quantity = round($quantity);
-        
+                
+		$quantity = round($quantity);
+		       
         if(count($this->errormsg) == 0)
         {
             $query = $this->mysqli->prepare("SELECT quantity FROM userstocks WHERE code=? AND username=?");
@@ -150,6 +150,7 @@ class VirtualTrader
                     // User has sufficient funds to purchase x quantity of shares
                     
                     $newbalance = $balance - $totalprice;
+					
                     $newquantity = $quantity;
                     
                     $query = $this->mysqli->prepare("UPDATE users SET balance=? WHERE username=?");
@@ -162,13 +163,15 @@ class VirtualTrader
                     $query->execute();
                     $query->close();
                     
-                    $this->LogActivity($username, "VIRTUALTRADER_STOCK_BUY", "Purchased {$quantity} {$stockcode} shares for {$totalprice} $ - New Quantity : {$quantity} - Old Balance : {$balance} $ - New Balance : {$newbalance} $");
+                    $this->LogActivity($username, "VIRTUALTRADER_STOCK_BUY_SUCCESS", "Purchased {$quantity} {$stockcode} shares for {$totalprice} $ - New Quantity : {$quantity} - Old Balance : {$balance} $ - New Balance : {$newbalance} $");
                     
                     $this->successmsg[] = sprintf($lang[$loc]['virtualtrader']['buyshare_success'], $quantity, $stockcode, $totalprice);
-                    return true;
+                    return $info;
                 }
                 else
                 {
+					$this->LogActivity($username, "VIRTUALTRADER_STOCK_BUY_FAIL", "User attempted to purchase {$quantity} {$stockcode} shares for {$totalprice} - Balance insufficient ({$balance} $)");
+				
                     $this->errormsg[] = $lang[$loc]['virtualtrader']['buyshare_funds_insufficient'];
                     return false;
                 }
@@ -206,7 +209,7 @@ class VirtualTrader
                     $query->execute();
                     $query->close();
                     
-                    $this->LogActivity($username, "VIRTUALTRADER_STOCK_BUY", "Purchased {$quantity} {$stockcode} shares for {$totalprice} $ - New Quantity : {$newquantity} - Old Balance : {$balance} $ - New Balance : {$newbalance} $");
+                    $this->LogActivity($username, "VIRTUALTRADER_STOCK_BUY_SUCESS", "Purchased {$quantity} {$stockcode} shares for {$totalprice} $ - New Quantity : {$newquantity} - Old Balance : {$balance} $ - New Balance : {$newbalance} $");
                     
                     $this->successmsg[] = sprintf($lang[$loc]['virtualtrader']['buyshare_success'], $quantity, $stockcode, $totalprice);
                     $this->successmsg[] = sprintf($lang[$loc]['virtualtrader']['buyshare_recount'], $newquantity, $stockcode);
@@ -214,6 +217,8 @@ class VirtualTrader
                 }
                 else
                 {
+					$this->LogActivity($username, "VIRTUALTRADER_STOCK_BUY_FAIL", "User attempted to purchase {$quantity} {$stockcode} shares for {$totalprice} - Balance insufficient ({$balance} $)");
+				
                     $this->errormsg[] = $lang[$loc]['virtualtrader']['buyshare_funds_insufficient'];
                     return false;
                 }
@@ -264,6 +269,8 @@ class VirtualTrader
             {
                 // User does not have any shares for the provided stockcode
                 
+				$this->LogActivity($username, "VIRTUALTRADER_STOCK_SELL_FAIL", "User attempted to sell {$quantity} {$stockcode} shares - user has 0 {$stockcode} shares)");
+				
                 $this->errormsg[] = sprintf($lang[$loc]['virtualtrader']['sellshare_stocks_none'], $stockcode);
                 return false;
             }
@@ -273,6 +280,8 @@ class VirtualTrader
                 {
                     // User is attempting to sell more shares than they have
                     
+					$this->LogActivity($username, "VIRTUALTRADER_STOCK_SELL_FAIL", "User attempted to sell {$quantity} {$stockcode} shares - Sale quantity ({$quantity}) exceeds actual quantity ({$db_quantity})");
+					
                     $this->errormsg[] = sprintf($lang[$loc]['virtualtrader']['sellshare_stocks_insufficient'], $stockcode);
                     return false;
                 }
@@ -309,7 +318,7 @@ class VirtualTrader
                         $query->execute();
                         $query->close();
                         
-                        $this->LogActivity($username, "VIRTUALTRADER_STOCK_SELL", "Sold  {$quantity} {$stockcode} shares for {$totalprice} $ - New Quantity :  0 - Old Balance : {$db_balance} $ - New Balance : {$newbalance} $");
+                        $this->LogActivity($username, "VIRTUALTRADER_STOCK_SELL_SUCCESS", "Sold  {$quantity} {$stockcode} shares for {$totalprice} $ - New Quantity :  0 - Old Balance : {$db_balance} $ - New Balance : {$newbalance} $");
                         
                         $this->successmsg[] = sprintf($lang[$loc]['virtualtrader']['sellshare_success'], $quantity, $stockcode, $totalprice);
                         $this->successmsg[] = sprintf($lang[$loc]['virtualtrader']['sellshare_recount'], 0, $stockcode);
@@ -330,7 +339,7 @@ class VirtualTrader
                         $query->execute();
                         $query->close();
                         
-                        $this->LogActivity($username, "VIRTUALTRADER_STOCK_SELL", "Sold {$quantity} {$stockcode} shares for {$totalprice} $ - New Quantity : {$newquantity} - Old Balance : {$db_balance} $ - New Balance : {$newbalance} $");
+                        $this->LogActivity($username, "VIRTUALTRADER_STOCK_SELL_SUCCESS", "Sold {$quantity} {$stockcode} shares for {$totalprice} $ - New Quantity : {$newquantity} - Old Balance : {$db_balance} $ - New Balance : {$newbalance} $");
                         
                         $this->successmsg[] = sprintf($lang[$loc]['virtualtrader']['sellshare_success'], $quantity, $stockcode, $totalprice);
                         $this->successmsg[] = sprintf($lang[$loc]['virtualtrader']['sellshare_recount'], $newquantity, $stockcode);
