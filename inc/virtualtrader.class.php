@@ -30,7 +30,6 @@ class VirtualTrader
         
         $stockinfo['code'] = $finance[0]->symbol['data']; // Stock code name (ex: GOOG)
         $stockinfo['name'] = $finance[0]->company['data']; // Stock Company Name (ex: Google Inc.)
-        $stockinfo['exchange'] = $finance[0]->exchange['data']; // Stock Exchange name (ex: Nasdaq)
         $stockinfo['price'] = floatval($finance[0]->last['data']); // Stock price
         $stockinfo['diff'] = floatval($finance[0]->change['data']); // Stock Difference
         $stockinfo['diff_perc'] = floatval($finance[0]->perc_change['data']); // Stock difference in percent
@@ -61,8 +60,8 @@ class VirtualTrader
             {
                 $stockinfo = $this->GetStockInfo($stockcode);
                 
-                $query2 = $this->mysqli->prepare("UPDATE stocks SET name=?, exchange=?, price=?, diff=?, diff_perc=? WHERE code=?");
-                $query2->bind_param("ssddds", $stockinfo['name'], $stockinfo['exchange'], $stockinfo['price'], $stockinfo['diff'], $stockinfo['diff_perc'], $stockcode);
+                $query2 = $this->mysqli->prepare("UPDATE stocks SET name=?, price=?, diff=?, diff_perc=? WHERE code=?");
+                $query2->bind_param("sddds", $stockinfo['name'], $stockinfo['price'], $stockinfo['diff'], $stockinfo['diff_perc'], $stockcode);
                 $query2->execute();
                 $query2->close();
             }
@@ -426,22 +425,15 @@ class VirtualTrader
     * Returns a list of stocks available for trading (in table) based on page number
     * @param int $page
     * @param int $amount (Amount of results to display per page)
-    * @param int $exchange (INT code of exchange)
     * @return string $table
     */
     
-    function ListStocks($page = 1, $amount = 10, $exchange = 1)
+    function ListStocks($page = 1, $amount = 10)
     {
         if(!is_int($page)) { $page = 1; $mysqlpage = 0; } else { $mysqlpage = $page * 10 - 10; }
-        if(!is_int($amount)) { $amount = 10; }
-        if(!is_int($exchange)) { $exchange = 1; }
+        if(!is_int($amount)) { $amount = 10; }      
         
-        if($exchange == 1) { $exchange_name = "Nasdaq"; }
-        elseif($exchange == 2) { $exchange_name = "Potato"; }
-        
-        
-        $query = $this->mysqli->prepare("SELECT * FROM stocks WHERE exchange=?");
-        $query->bind_param("s", $exchange_name);
+        $query = $this->mysqli->prepare("SELECT * FROM stocks");
         $query->execute();
         $query->store_result();
         $count = $query->num_rows;
@@ -459,8 +451,8 @@ class VirtualTrader
             $i++;
         }
         
-        $query = $this->mysqli->prepare("SELECT name, code, price, diff, diff_perc FROM stocks WHERE exchange=? ORDER BY name ASC LIMIT ?,?");
-        $query->bind_param("sii", $exchange_name, $mysqlpage, $amount);
+        $query = $this->mysqli->prepare("SELECT name, code, price, diff, diff_perc FROM stocks ORDER BY name ASC LIMIT ?,?");
+        $query->bind_param("ii", $mysqlpage, $amount);
         $query->bind_result($stockname, $stockcode, $stockprice, $stockdiff, $stockdiff_perc);
         $query->execute();
         $query->store_result();

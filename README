@@ -1,12 +1,23 @@
-VirtualTrader Beta
-===================
+VirtualTrader
+=============
 
-VirtualTrader Beta is the latest modification of VirtualTrader.
-The website will use much cleaner coding, and PHP Classes,
-simplifying in-site operations.
+VirtualTrader is a virtual stock market trading game, where players
+buy and sell actual shares at their real-time prices, with virtual
+money. The aim of the game is to make as much as possible trading
+these shares.
 
-This new system uses the PHP Auth Class I developed, and uses
-custom cookie based sessions, that last 1 month before expiry.
+All users start off with 200.00 $ 
+
+------------------------------------------------------------------
+
+The system is based around two central PHP classes : auth.class.php
+and virtualtrader.class.php, the Auth class handles user authentication
+and session protection, whilst the VirtualTrader class handles the buying
+and selling of shares, listing, obtaining live prices etc...
+
+The real time prices are obtained Via Google Finance, for them to be more
+or less real time, a cron job is required to run every 5 minutes to update
+the database.
 
 Whilst in development, pages are accessible via the GET Variable,
 "page"
@@ -18,6 +29,13 @@ cleaner URLs
 
 Example : 127.0.0.1/login
 
-Each page requires an $title and $content to be displayed correctly.
+VirtualTrader features a basic template system : the template is the
+same on all pages, each page is differed by it's $title and $content
+variables.
+
+The included "virtualtrader.sql" is the default Database layout, which
+also includes 40 well known technology companies' stocks.
+
 Error / Success messages from the class are displayed if they exist
-on any page.
+on any page, this is built into the template system : No need to add
+any error displaying in the page's $content variable
