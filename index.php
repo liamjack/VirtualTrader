@@ -32,6 +32,9 @@ if(isset($_GET['page']))
 		case 'resetpass':
 			include("pages/resetpass.php");
 			break;
+		case 'activate':
+			include("pages/activate.php");
+			break;
 		case 'change-pass':
 			include("pages/change-pass.php");
 			break;
