@@ -2,18 +2,25 @@
 
 class VirtualTrader
 {
-    private $mysqli;
-    public $errormsg;
-    public $successmsg;
-    
-    function __construct()
-    {
-        include("config.php");
-        
-        $this->mysqli = new mysqli($db['host'], $db['user'], $db['pass'], $db['name']);
-    }
-    
-    function GetStockInfo($stockcode)
+
+	private $mysqli;
+	public $errormsg;
+	public $successmsg;
+	
+	function __construct()
+	{
+		include("config.php");
+	
+		$this->mysqli = new mysqli($db['host'], $db['user'], $db['pass'], $db['name']); 
+	}
+	
+	/*
+	* Fetches info for a specific stockcode from Google Finance
+	* @param string $stockcode
+	* @return array $stockinfo
+	*/
+	
+	function GetStockInfo($stockcode)
     {
         $url = "http://www.google.com/ig/api?stock=" . $stockcode;
         
@@ -33,9 +40,57 @@ class VirtualTrader
         $stockinfo['price'] = floatval($finance[0]->last['data']); // Stock price
         $stockinfo['diff'] = floatval($finance[0]->change['data']); // Stock Difference
         $stockinfo['diff_perc'] = floatval($finance[0]->perc_change['data']); // Stock difference in percent
-        
-        return $stockinfo;
+		
+		if($stockinfo['price'] == 0)
+		{
+			return false;
+		}
+		else
+		{
+			return $stockinfo;
+		}
     }
+	
+	/*
+	* Fetches info for a specific stockcode from database
+	* @param string $stockcode
+	* @return array $stockinfo
+	*/
+	
+	function GetStockInfoDB($stockcode)
+	{
+		if(strlen($stockcode) == 0) { return false; }
+		elseif(strlen($stockcode) < 1) { return false; }
+		elseif(strlen($stockcode) > 10) { return false; }
+		else
+		{
+			$query = $this->mysqli->prepare("SELECT name, code, price, diff, diff_perc FROM stocks WHERE code=?");
+			$query->bind_param("s", $stockcode);
+			$query->bind_result($stockinfo['name'], $stockinfo['code'], $stockinfo['price'], $stockinfo['diff'], $stockinfo['diff_perc']);
+			$query->execute();
+			$query->store_result();
+			$count = $query->num_rows;
+			
+			if($count == 0)
+			{
+				$query->close();
+				
+				return false;
+			}
+			else
+			{
+				$query->fetch();
+				
+				$stockinfo['price'] = round($stockinfo['price'], 2);
+				$stockinfo['diff'] = round($stockinfo['diff'], 2);
+				$stockinfo['diff_perc'] = round($stockinfo['diff_perc'], 2);
+				
+				$query->close();
+				
+				return $stockinfo;
+			}
+		}
+	}
     
     /*
     * Updates the entire stock database based on Stockcode
@@ -133,9 +188,10 @@ class VirtualTrader
             {
                 // User has 0 shares for the provided stock code
                 
-                $stockinfo = $this->GetStockInfo($stockcode);
+                $stockinfo = $this->GetStockInfoDB($stockcode);
                 
                 $totalprice = $quantity * $stockinfo['price'];
+				$totalprice = round($totalprice, 2);
                 
                 $query = $this->mysqli->prepare("SELECT balance FROM users WHERE username=?");
                 $query->bind_param("s", $username);
@@ -180,9 +236,10 @@ class VirtualTrader
             {
                 // User already has existing shares for the provided stock code
             
-                $stockinfo = $this->GetStockInfo($stockcode);
+                $stockinfo = $this->GetStockInfoDB($stockcode);
                 
                 $totalprice = $quantity * $stockinfo['price'];
+				$totalprice = round($totalprice, 2);
                 
                 $query = $this->mysqli->prepare("SELECT balance FROM users WHERE username=?");
                 $query->bind_param("s", $username);
@@ -290,7 +347,7 @@ class VirtualTrader
                     
                     $newquantity = $db_quantity - $quantity;
                     
-                    $stockinfo = $this->GetStockInfo($stockcode);
+                    $stockinfo = $this->GetStockInfoDB($stockcode);
                 
                     $totalprice = $quantity * $stockinfo['price'];
                     
@@ -422,162 +479,142 @@ class VirtualTrader
 	}
 	
 	/*
-    * Returns a list of stocks available for trading (in table) based on page number
-    * @param int $page
-    * @param int $amount (Amount of results to display per page)
-    * @return string $table
-    */
-    
-    function ListStocks($page = 1, $amount = 10)
-    {
-        if(!is_int($page)) { $page = 1; $mysqlpage = 0; } else { $mysqlpage = $page * 10 - 10; }
-        if(!is_int($amount)) { $amount = 10; }      
-        
-        $query = $this->mysqli->prepare("SELECT * FROM stocks");
-        $query->execute();
-        $query->store_result();
-        $count = $query->num_rows;
-        $query->close();
-        
-        $totalpage = ceil($count / $amount);
-        
-        $i = 1;
-        $numbering = "";
+	* Returns an array of all stocks available for trading
+	* @return array $data
+	*/
+	
+	public function GetStocks()
+	{
+		$query = $this->mysqli->prepare("SELECT id, name, code, price, diff, diff_perc FROM stocks ORDER BY name ASC");
+		$query->bind_result($id, $name, $code, $price, $diff, $diff_perc);
+		$query->execute();
+		$query->store_result();
+		$count = $query->num_rows;
+		
+		if($count == 0)
+		{
+			// Query returned 0 rows
+			
+			$query->close();
+			
+			return false;
+		}
+		else
+		{
+			// Query returned more than 0 rows
+			
+			$i = 0;
+			
+			while($query->fetch())
+			{
+				$data[$i]['id'] = $id;
+				$data[$i]['name'] = $name;
+				$data[$i]['code'] = $code;
+				$data[$i]['price'] = round($price, 2);
+				$data[$i]['diff'] = round($diff, 2);
+				$data[$i]['diff_perc'] = round($diff_perc, 2);
+				
+				$i++;
+			}
+			
+			$query->close();
+			
+			return $data;
+		}
+	}
+	
+	/*
+	* Returns an array of stocks for a given user
+	* @param string $username
+	* @return array $data
+	*/
+	
+	function GetUserStocks($username)
+	{
+		if(strlen($username) == 0) { return false; }
+		elseif(strlen($username) > 30) { return false; }
+		elseif(strlen($username) < 3) { return false; }
+		else
+		{
+			$query = $this->mysqli->prepare("SELECT code, quantity, p_price FROM userstocks WHERE username=?");
+			$query->bind_param("s", $username);
+			$query->bind_result($code, $quantity, $p_price);
+			$query->execute();
+			$query->store_result();
+			$count = $query->num_rows;
+		 
+			if($count == 0)
+			{
+				$query->close();
+			
+				return false;
+			}
+			else
+			{
+				$i = 0;
+		
+				while($query->fetch())
+				{
+					$stockinfo = $this->GetStockInfoDB($code);
+				
+					$data[$i]['name'] = $stockinfo['name'];
+					$data[$i]['code'] = $code;
+					$data[$i]['p_price'] = round($p_price, 2);
+					$data[$i]['c_price'] = round($stockinfo['price'], 2);
+				
+					$diff = round($p_price - $stockinfo['price'], 2);
+				
+					if($diff == 0) { $data[$i]['diff'] = 0; }
+					else { $data[$i]['diff'] = $diff * -1; }
+				
+					$data[$i]['quantity'] = $quantity;
+				
+					$i++;
+				}
+			
+				$query->close();
+			
+				return $data;
+			}
+		}
+	}
 
-        while($i <= $totalpage)
-        {
-            if($i == $page) { $numbering .= " <a href=\"?page=stocks&pn=$i\">[$i]</a> "; }
-            else { $numbering .= " <a href=\"?page=stocks&pn=$i\">$i</a> "; }
-            $i++;
-        }
-        
-        $query = $this->mysqli->prepare("SELECT name, code, price, diff, diff_perc FROM stocks ORDER BY name ASC LIMIT ?,?");
-        $query->bind_param("ii", $mysqlpage, $amount);
-        $query->bind_result($stockname, $stockcode, $stockprice, $stockdiff, $stockdiff_perc);
-        $query->execute();
-        $query->store_result();
-        $count = $query->num_rows;
-        
-        if($count > 0)
-        {
-            $table = '<table width="95%" border="0" cellspacing="3" cellpadding="3"><tr>
-                        <td width="40%" height="50"><b>Stock Name :</b></td>
-                        <td width="15%"><b>Stock Code :</b></td>
-                        <td width="13%"><b>Price :</b></td>
-                <td width="20%"><b>Difference :</b></td>
-                        <td width="4%">&nbsp;</td>
-                      </tr>';
-        
-            while($query->fetch())
-            {
-                $stockprice = round($stockprice, 2);
-                $stockdiff = round($stockdiff, 2);
-                $stockdiff_perc = round($stockdiff_perc, 2);
-            
-                $table .= "<tr>
-                            <td>{$stockname}</td>
-                            <td>{$stockcode}</td>
-                            <td>{$stockprice} $</td>
-                            <td>{$stockdiff} ({$stockdiff_perc} %)</td>
-                            <td><a href=\"?page=stockinfo&code={$stockcode}\"><img src=\"images/info.png\" /></a></td>
-                            </tr>";
-            }
-            
-            $table .= "</table>";
-        }
-        else
-        {
-            $table = "0 stocks found !";
-        }
-        
-        $table .= "<br/><br/>";
-        $table .= $numbering;
-        
-        return $table;
-    }
-    
-    /*
-    * Returns a list of stocks that the user owns based on username
-    * @param string $username
-    * @param int $page
-    * @param int $amount (Amount of results to display per page)
-    * @return string $table
-    */
-    
-    function ListUserStocks($username, $page = 1, $amount = 10)
-    {
-        if(!is_int($page)) { $page = 1; $mysqlpage = 0; } else { $mysqlpage = $page * 10 - 10; }
-        if(!is_int($amount)) { $amount = 10; }       
-        
-        $query = $this->mysqli->prepare("SELECT * FROM userstocks WHERE username=?");
-        $query->bind_param("s", $username);
-        $query->execute();
-        $query->store_result();
-        $count = $query->num_rows;
-        $query->close();
-        
-        $totalpage = ceil($count / $amount);
-        
-        $i = 1;
-        $numbering = "";
-
-        while($i <= $totalpage)
-        {
-            if($i == $page) { $numbering .= " <a href=\"?page=mystocks&pn=$i\">[$i]</a> "; }
-            else { $numbering .= " <a href=\"?page=mystocks&pn=$i\">$i</a> "; }
-            $i++;
-        }
-        
-        $query = $this->mysqli->prepare("SELECT code, quantity, p_price FROM userstocks WHERE username=? LIMIT ?,?");
-        $query->bind_param("sii", $username, $mysqlpage, $amount);
-        $query->bind_result($stockcode, $stockquantity, $stockp_price);
-        $query->execute();
-        $query->store_result();
-        $count = $query->num_rows;
-        
-        if($count > 0)
-        {
-            $table = '<table width="95%" border="0" cellspacing="3" cellpadding="3"><tr>
-                        <td width="30%" height="50"><b>Stock Name :</b></td>
-                        <td width="15%"><b>Stock Code :</b></td>
-                        <td width="15%"><b>Previous Price :</b></td>
-                <td width="20%"><b>Current Price :</b></td>
-                <td width="7%"><b>Qty :</b></td>
-                        <td width="3%">&nbsp;</td>
-                      </tr>';
-        
-            while($query->fetch())
-            {
-                $stockinfo = $this->GetStockInfo($stockcode);
-                
-                $stockp_price = round($stockp_price, 2);
-                $stockc_price = round($stockinfo['price'], 2);
-                
-                $stockname = $stockinfo['name'];
-                
-            
-                $table .= "<tr>
-                            <td>{$stockname}</td>
-                            <td>{$stockcode}</td>
-                            <td>{$stockp_price} $</td>
-                            <td>{$stockc_price} $</td>
-                            <td>{$stockquantity}</td>
-                            <td><a href=\"?page=stockinfo&code={$stockcode}\"><img src=\"images/info.png\" /></a></td>
-                            </tr>";
-            }
-            
-            $table .= "</table>";
-        }
-        else
-        {
-            $table = "0 stocks found !";
-        }
-        
-        $table .= "<br/><br/>";
-        $table .= $numbering;
-        
-        return $table;
-    }
+	/*
+	* Returns an array of top 10 users
+	* @return array $data
+	*/
+	
+	function GetTopUsers()
+	{
+		$query = $this->mysqli->prepare("SELECT username, balance FROM users ORDER BY balance ASC LIMIT 10");
+		$query->bind_result($username, $balance);
+		$query->execute();
+		$query->store_result();
+		$count = $query->num_rows;
+		
+		if($count == 0)
+		{
+			$query->close();
+			
+			return false;
+		}
+		else
+		{
+			$i = 0;
+		
+			while($query->fetch())
+			{
+				$data[$i]['username'] = $username;
+				$data[$i]['balance'] = round($balance, 2);
+				
+				$i++;
+			}
+			
+			$query->close();
+			
+			return $data;
+		}
+	}
     
     /*
     * Function that returns the user's balance
@@ -602,6 +639,8 @@ class VirtualTrader
     	}
     	else
     	{
+			$balance = round($balance, 2);
+		
     		return $balance;
     	}
     }

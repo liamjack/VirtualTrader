@@ -131,7 +131,7 @@ $lang['en']['virtualtrader']['buyshare_quantity_infzero'] = "Quantity is invalid
 $lang['en']['virtualtrader']['buyshare_username_empty'] = "Error encountered !";
 $lang['en']['virtualtrader']['buyshare_username_short'] = "Error encountered !";
 $lang['en']['virtualtrader']['buyshare_username_long'] = "Error encountered !";
-$lang['en']['virtualtrader']['buyshare_success'] = "You have purchased %d %s shares for %d $ !";
+$lang['en']['virtualtrader']['buyshare_success'] = "You have purchased %d %s shares for %f $ !";
 $lang['en']['virtualtrader']['buyshare_funds_insufficient'] = "You do not have sufficient funds !";
 $lang['en']['virtualtrader']['buyshare_recount'] = "You now have %d %s shares.";
 
@@ -144,7 +144,7 @@ $lang['en']['virtualtrader']['sellshare_username_short'] = "Error encountered !"
 $lang['en']['virtualtrader']['sellshare_username_long'] = "Error encountered !";
 $lang['en']['virtualtrader']['sellshare_stocks_none'] = "You do not have any %s shares to sell !";
 $lang['en']['virtualtrader']['sellshare_stocks_insufficient'] = "You do not have that many %s shares to sell !";
-$lang['en']['virtualtrader']['sellshare_success'] = "You have sold %d %s shares for %d $ !";
+$lang['en']['virtualtrader']['sellshare_success'] = "You have sold %d %s shares for %f $ !";
 $lang['en']['virtualtrader']['sellshare_recount'] = "You have %d %s shares remaining !";
 
 $lang['en']['virtualtrader']['logactivity_username_empty'] = "Error encountered !";

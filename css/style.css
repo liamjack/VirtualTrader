@@ -29,7 +29,7 @@ a:visited {
 .logo {
 	width: 425px;
 	height: 62px;
-	background-image: url("images/logo.png");
+	background-image: url("../img/logo.png");
 	font-size: 45px;
 	color: #dbdbdb;
 	float: left;

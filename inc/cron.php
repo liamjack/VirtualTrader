@@ -3,10 +3,11 @@
 include("auth.class.php");
 include("virtualtrader.class.php");
 
-$auth = new auth;
+$auth = new Auth;
 $virtualtrader = new VirtualTrader;
 
 $auth->expireattempt();
+
 $virtualtrader->UpdateStockDB();
 
 ?>

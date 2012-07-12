@@ -33,37 +33,38 @@ else
     </div>
 </div>
 <div class="content">
-<h1>Stock List</h1>
+<h1>Top 10</h1>
 <?php
 if(isset($auth->errormsg)) { echo "<span class=\"errormsg\">"; foreach ($auth->errormsg as $emsg) { echo "$emsg<br/>"; } echo "</span><br/>"; }
 if(isset($auth->successmsg)) { echo "<span class=\"successmsg\">"; foreach ($auth->successmsg as $smsg) { echo "$smsg<br/>"; } echo "</span><br/>"; }  
 if(isset($virtualtrader->errormsg)) { echo "<span class=\"errormsg\">"; foreach ($virtualtrader->errormsg as $vemsg) { echo "$vemsg<br/>"; } echo "</span><br/>"; }
 if(isset($virtualtrader->successmsg)) { echo "<span class=\"successmsg\">"; foreach ($virtualtrader->successmsg as $vsmsg) { echo "$vsmsg<br/>"; } echo "</span><br/>"; }  
 ?>
-<?php if($data = $virtualtrader->GetStocks())
+<?php if($data = $virtualtrader->GetTopUsers())
 {
 ?>
 <table width="95%" border="0" cellspacing="3" cellpadding="3">
 <tr>
-	<td width="40%" height="50"><b>Stock Name :</b></td>
-	<td width="15%"><b>Stock Code :</b></td>
-	<td width="13%"><b>Price :</b></td>
-	<td width="20%"><b>Difference :</b></td>
+	<td width="20%" height="50"><b>Position :</b></td>
+	<td width="50%"><b>Username :</b></td>
+	<td width="20%"><b>Balance :</b></td>
 	<td width="4%">&nbsp;</td>
 </tr>
-<?php foreach($data as $table)
+<?php 
+$i = 1;
+
+foreach($data as $table)
 { ?>
 <tr>
-	<td><?php echo $table['name']; ?></td>
-	<td><?php echo $table['code']; ?></td>
-	<td><?php echo $table['price']; ?> $</td>
-	<td><?php echo $table['diff']; ?> (<?php echo $table['diff_perc']; ?> %)</td>
-	<td><a href="?page=stockinfo&code=<?php echo $table['code']; ?>"><img src="img/info.png" /></a></td>
+	<td><?php echo $i; ?></td>
+	<td><?php echo $table['username']; ?></td>
+	<td><?php echo $table['balance']; ?> $</td>
+	<td><a href="?page=userinfo&username=<?php echo $table['username']; ?>"><img src="img/info.png" /></a></td>
 </tr>
-<?php } ?>
+<?php $i++; } ?>
 </table>
 <?php } else { ?>
-0 stocks in database !
+0 users in database !
 <?php } ?>
 </div>
 </div>

@@ -96,7 +96,7 @@ class auth
 						{
 							// Account is activated
 							
-							$this->newsession($username);						
+							$this->newsession($username);				
 
 							$this->LogActivity($username, "AUTH_LOGIN_SUCCESS", "User logged in");
 					
@@ -198,10 +198,9 @@ class auth
 					
 						$password = $this->hashpass($password);
 						$activekey = $this->randomkey(15);	 
-						$balance = 200.00;
-						
-						$query = $this->mysqli->prepare("INSERT INTO users (username, password, email, activekey, balance) VALUES (?, ?, ?, ?, ?)");
-						$query->bind_param("ssssd", $username, $password, $email, $activekey, $balance);
+					
+						$query = $this->mysqli->prepare("INSERT INTO users (username, password, email, activekey) VALUES (?, ?, ?, ?)");
+						$query->bind_param("ssss", $username, $password, $email, $activekey);
 						$query->execute();
 						$query->close();
 						
@@ -769,7 +768,7 @@ class auth
 					$message_cont = "Hello {$username}<br/><br/>";
 					$message_cont .= "You recently requested a password reset on " . $auth_conf['site_name'] . "<br/>";
 					$message_cont .= "To proceed with the password reset, please click the following link :<br/><br/>";
-					$message_cont .= "<b><a href=\"" . $auth_conf['base_url'] . "?page=forgot&username={$username}&key={$resetkey}\">Reset My Password</a></b>";
+					$message_cont .= "<b><a href=\"" . $auth_conf['base_url'] . "?page=resetpass&username={$username}&key={$resetkey}\">Reset My Password</a></b>";
 					$message_head = "From: {$message_from}" . "\r\n";
 					$message_head .= "MIME-Version: 1.0" . "\r\n";
 					$message_head .= "Content-type: text/html; charset=iso-8859-1" . "\r\n";
@@ -1137,7 +1136,7 @@ class auth
 		include("config.php");
 		include("lang.php");
 	
-		if(strlen($username) == 0) { $this->errormsg[] = $lang[$loc]['auth']['logactivity_username_empty']; return false; }
+		if(strlen($username) == 0) { $username = "GUEST"; }
 		elseif(strlen($username) < 3) { $this->errormsg[] = $lang[$loc]['auth']['logactivity_username_short']; return false; }
 		elseif(strlen($username) > 30) { $this->errormsg[] = $lang[$loc]['auth']['logactivity_username_long']; return false; }
 		

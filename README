@@ -2,11 +2,11 @@ VirtualTrader
 =============
 
 VirtualTrader is a virtual stock market trading game, where players
-buy and sell actual shares at their real-time prices, with virtual
-money. The aim of the game is to make as much as possible trading
-these shares.
+buy and sell real shares at their real-time prices, in a virtual 
+environment, with virtual money. The aim of the game is to make as
+much as possible trading these shares.
 
-All users start off with 200.00 $ 
+All users start off with 200.00 $
 
 ------------------------------------------------------------------
 
@@ -17,7 +17,7 @@ and selling of shares, listing, obtaining live prices etc...
 
 The real time prices are obtained Via Google Finance, for them to be more
 or less real time, a cron job is required to run every 5 minutes to update
-the database.
+the database. (inc/cron.php)
 
 Whilst in development, pages are accessible via the GET Variable,
 "page"
@@ -28,10 +28,6 @@ This will be changed when in Production via Htaccess to provide
 cleaner URLs
 
 Example : 127.0.0.1/login
-
-VirtualTrader features a basic template system : the template is the
-same on all pages, each page is differed by it's $title and $content
-variables.
 
 The included "virtualtrader.sql" is the default Database layout, which
 also includes 40 well known technology companies' stocks.

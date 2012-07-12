@@ -4,7 +4,7 @@ if(isset($_COOKIE['auth_session']))
 {
 	if($auth->checksession($_COOKIE['auth_session']))
 	{
-		header("Location: ?page=members&m=4");
+		header("Location: ?page=home");
 		exit();
 	}
 }
@@ -16,10 +16,14 @@ if(isset($_GET['username']))
 		header("Location: ?page=login&m=2");
 		exit();
 	}
+	else
+	{
+		if(isset($auth->errormsg)) { echo "Error :"; foreach ($auth->errormsg as $emsg) { echo "$emsg<br/>"; } }
+	}
 }
-
-$title = 'Activate Account';
-
-$content = '';
+else
+{
+	echo "No parameters provided.";
+}
 
 ?>

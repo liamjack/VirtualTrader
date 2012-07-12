@@ -2,16 +2,21 @@
 
 if(isset($_COOKIE['auth_session']))
 {
-	if($auth->checksession($_COOKIE['auth_session']))
+	if(!$auth->checksession($_COOKIE['auth_session']))
 	{
-		header("Location: ?page=home");
+		header("Location: ?page=login&m=1");
 		exit();
 	}
 }
-
-if($_POST)
+else
 {
-	$auth->register($_POST['username'], $_POST['password'], $_POST['verifypassword'], $_POST['email']);
+	header("Location: ?page=login&m=1");
+	exit();
+}
+
+if(isset($_POST['email']))
+{
+	$auth->changeemail($session['username'], $_POST['email']);
 }
 
 ?>
@@ -26,40 +31,23 @@ if($_POST)
 <div class="box">
 <div class="logo"></div>
 <div class="content">
-<h1>Register</h1>
+<h1>Change Email</h1>
 <?php
 if(isset($auth->errormsg)) { echo "<span class=\"errormsg\">"; foreach ($auth->errormsg as $emsg) { echo "$emsg<br/>"; } echo "</span><br/>"; }
 if(isset($auth->successmsg)) { echo "<span class=\"successmsg\">"; foreach ($auth->successmsg as $smsg) { echo "$smsg<br/>"; } echo "</span><br/>"; }  
 if(isset($virtualtrader->errormsg)) { echo "<span class=\"errormsg\">"; foreach ($virtualtrader->errormsg as $vemsg) { echo "$vemsg<br/>"; } echo "</span><br/>"; }
 if(isset($virtualtrader->successmsg)) { echo "<span class=\"successmsg\">"; foreach ($virtualtrader->successmsg as $vsmsg) { echo "$vsmsg<br/>"; } echo "</span><br/>"; }  
 ?>
-<form method="post" action="?page=register">
+<form action="?page=change-email" method="post">
 <table class="center" border="0" cellspacing="5" cellpadding="5">
-  <tr>
-    <td>Username :</td>
-    <td><label for="username"></label>
-    <input name="username" type="text" id="username" maxlength="30" /></td>
-  </tr>
-  <tr>
-    <td>Password :</td>
-    <td><label for="password"></label>
-    <input name="password" type="password" id="password" maxlength="30" /></td>
-  </tr>
-  <tr>
-    <td>Verify Password :</td>
-    <td><label for="verifypassword"></label>
-    <input name="verifypassword" type="password" id="verifypassword" maxlength="30" /></td>
-  </tr>
-  <tr>
-    <td>Email :</td>
-    <td><label for="email"></label>
-    <input name="email" type="text" id="email" maxlength="100" /></td>
-  </tr>
-  <tr>
-    <td colspan="2"><br /><input type="submit" value="Register &gt;" /></td>
-  </tr>
-</table>
-</form><br/><span class="small"><a href="?page=login">I already have an account ></a></span>
+<tr>
+<td>New Email :</td>
+<td><input type="text" name="email" maxlength="100" /></td>
+</tr>
+<tr>
+<td colspan="2"><br/><input type="submit" value="Change Email >" /></td>
+</tr>
+</table></form><br/><span class="small"><a href="?page=home">Return to the Homepage ></a></span>
 </div>
 </div>
 </body>
