@@ -46,7 +46,7 @@ if(isset($_POST['action']))
 <div class="box">
 <div class="logo"></div>
 <div class="member">
-    <div class="member-content">Welcome <b><?php echo $session['username']; ?></b><br>
+    <div class="member-content">Welcome <b><?php echo $session['username']; ?></b> (<?php echo $userbalance; ?> $)<br>
     <br>
     <a href="?page=home">Home &gt;</a><br>
     <a href="?page=logout">Logout &gt;</a>
@@ -65,19 +65,19 @@ if(isset($virtualtrader->successmsg)) { echo "<span class=\"successmsg\">"; fore
 ?>
 <center><img src="http://chart.finance.yahoo.com/z?s=<?php echo $stockinfo['code']; ?>&t=5d&q=&l=&z=m&a=v&p=s" /></center>
 <br/><br/>
-Company Name : <?php echo $stockinfo['name']; ?>  <br/><br/>
-Share Price : <?php echo $stockinfo['price']; ?>  $<br/>
-Price Difference : <?php echo $stockinfo['diff']; ?> $ (<?php echo $stockinfo['diff_perc']; ?> %)<br/><br/>
+Company Name : <strong><?php echo $stockinfo['name']; ?></strong><br/><br/>
+Share Price : <strong><?php echo $stockinfo['price']; ?>  $</strong><br/>
+Price Difference : <strong><?php if($stockinfo['diff'] > 0) { echo "<img src=\"img/up.png\"/> "; } elseif($stockinfo['diff'] < 0) { echo "<img src=\"img/down.png\"/> "; } echo abs($stockinfo['diff']); ?> (<?php if($stockinfo['diff_perc'] > 0) { echo "+"; } echo $stockinfo['diff_perc']; ?> %)</strong><br/><br/>
 <?php if($quantity = $virtualtrader->ShareQty($session['username'], $stockinfo['code']))
 {
 	$total = $quantity * $stockinfo['price'];
 
-	if($quantity == 1) { echo "You have 1 " . $stockinfo['code'] . " share, which is currently worth {$total} $<br/><br/>"; }
-	else { echo "You have {$quantity} " . $stockinfo['code'] . " shares, which are currently worth {$total} $<br/><br/>"; }
+	if($quantity == 1) { echo "You have <strong>1</strong> " . $stockinfo['code'] . " share, which is currently worth <strong>{$total} $</strong><br/><br/>"; }
+	else { echo "You have <strong>{$quantity}</strong> " . $stockinfo['code'] . " shares, which are currently worth <strong>{$total} $</strong><br/><br/>"; }
 }
 else
 {
-	echo "You have 0 " . $stockinfo['code'] . " shares<br/><br/>";
+	echo "You have <strong>0</strong> " . $stockinfo['code'] . " shares<br/><br/>";
 }
 
 ?>
@@ -91,8 +91,6 @@ Sell : <form method="post" action="?page=stockinfo&code=<?php echo $stockinfo['c
 <input name="quantity" type="text" maxlength="5" placeholder="Quantity">
 <input type="submit" value="Sell &gt;">
 </form><br/>
-<?php } else { ?>
-0 users in database !
 <?php } ?>
 </div>
 </div>

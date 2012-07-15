@@ -11,6 +11,7 @@ if(isset($_COOKIE['auth_session']))
 	if($auth->checksession($_COOKIE['auth_session']))
 	{
 		$session = $auth->sessioninfo($_COOKIE['auth_session']);
+		$userbalance = $virtualtrader->GetUserBalance($session['username']);
 	}
 }
 

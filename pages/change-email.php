@@ -30,6 +30,13 @@ if(isset($_POST['email']))
 <div class="reminder">Reminder : This layout is not final and is only used to display site functionality</div>
 <div class="box">
 <div class="logo"></div>
+<div class="member">
+    <div class="member-content">Welcome <b><?php echo $session['username']; ?></b> (<?php echo $userbalance; ?> $)<br>
+    <br>
+    <a href="?page=home">Home &gt;</a><br>
+    <a href="?page=logout">Logout &gt;</a>
+    </div>
+</div>
 <div class="content">
 <h1>Change Email</h1>
 <?php

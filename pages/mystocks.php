@@ -26,7 +26,7 @@ else
 <div class="box">
 <div class="logo"></div>
 <div class="member">
-    <div class="member-content">Welcome <b><?php echo $session['username']; ?></b><br>
+    <div class="member-content">Welcome <b><?php echo $session['username']; ?></b> (<?php echo $userbalance; ?> $)<br>
     <br>
     <a href="?page=home">Home &gt;</a><br>
     <a href="?page=logout">Logout &gt;</a>
