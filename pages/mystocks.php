@@ -59,7 +59,7 @@ if(isset($virtualtrader->successmsg)) { echo "<span class=\"successmsg\">"; fore
 	<td><?php echo $table['code']; ?></td>
 	<td><?php echo $table['p_price']; ?> $</td>
 	<td><?php echo $table['c_price']; ?> $</td>
-	<td><?php if($table['diff'] > 0) { echo "+"; } echo $table['diff']; ?></td>
+	<td><?php if($table['diff'] > 0) { echo "<img src=\"img/up.png\"/> "; } elseif($table['diff'] < 0) { echo "<img src=\"img/down.png\"/> "; } echo abs($table['diff']); ?></td>
 	<td><a href="?page=stockinfo&code=<?php echo $table['code']; ?>"><img src="img/info.png" /></a></td>
 </tr>
 <?php } ?>
