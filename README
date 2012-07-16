@@ -10,28 +10,6 @@ All users start off with 200.00 $
 
 ------------------------------------------------------------------
 
-The system is based around two central PHP classes : auth.class.php
-and virtualtrader.class.php, the Auth class handles user authentication
-and session protection, whilst the VirtualTrader class handles the buying
-and selling of shares, listing, obtaining live prices etc...
+Full VirtualTrader class information can be found here :
 
-The real time prices are obtained Via Google Finance, for them to be more
-or less real time, a cron job is required to run every 5 minutes to update
-the database. (inc/cron.php)
-
-Whilst in development, pages are accessible via the GET Variable,
-"page"
-
-Example : 127.0.0.1/?page=login
-
-This will be changed when in Production via Htaccess to provide
-cleaner URLs
-
-Example : 127.0.0.1/login
-
-The included "virtualtrader.sql" is the default Database layout, which
-also includes 40 well known technology companies' stocks.
-
-Error / Success messages from the class are displayed if they exist
-on any page, this is built into the template system : No need to add
-any error displaying in the page's $content variable
+https://github.com/cuonic/VirtualTrader/wiki/The-VirtualTrader-Class

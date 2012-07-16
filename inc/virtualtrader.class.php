@@ -221,7 +221,7 @@ class VirtualTrader
                     $this->LogActivity($username, "VIRTUALTRADER_STOCK_BUY_SUCCESS", "Purchased {$quantity} {$stockcode} shares for {$totalprice} $ - New Quantity : {$quantity} - Old Balance : {$balance} $ - New Balance : {$newbalance} $");
                     
                     $this->successmsg[] = sprintf($lang[$loc]['virtualtrader']['buyshare_success'], $quantity, $stockcode, $totalprice);
-                    return $info;
+                    return true;
                 }
                 else
                 {
@@ -483,7 +483,7 @@ class VirtualTrader
 	* @return array $data
 	*/
 	
-	public function GetStocks()
+	function GetStocks()
 	{
 		$query = $this->mysqli->prepare("SELECT id, name, code, price, diff, diff_perc FROM stocks ORDER BY name ASC");
 		$query->bind_result($id, $name, $code, $price, $diff, $diff_perc);
