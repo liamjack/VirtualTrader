@@ -43,12 +43,12 @@ if(isset($virtualtrader->successmsg)) { echo "<span class=\"successmsg\">"; fore
 <?php if($data = $virtualtrader->GetTopUsers())
 {
 ?>
-<table width="95%" border="0" cellspacing="3" cellpadding="3">
+<table width="100%" border="0" cellspacing="3" cellpadding="3">
 <tr>
-	<td width="20%" height="50"><b>Position :</b></td>
-	<td width="50%"><b>Username :</b></td>
-	<td width="20%"><b>Balance :</b></td>
-	<td width="4%">&nbsp;</td>
+	<td height="50"><b>Position :</b></td>
+	<td><b>Username :</b></td>
+	<td><b>Balance :</b></td>
+	<td></td>
 </tr>
 <?php 
 $i = 1;

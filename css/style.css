@@ -22,7 +22,7 @@ a:visited {
 	margin-right: auto;
 	margin-top: 50px;
 	margin-left: auto;
-	width: 700px;
+	width: 800px;
 	clear: none;
 	float: none;
 }
@@ -43,9 +43,9 @@ body {
 	padding: 20px;
 	font-size: 16px;
 	margin-top: 20px;
-	background-color: #e4e4e4;
+	background-color: #FFF;
 	float: left;
-	width: 660px;
+	width: 750px;
 }
 .content h1 {
 	font-size: 26px;

@@ -43,13 +43,13 @@ if(isset($virtualtrader->successmsg)) { echo "<span class=\"successmsg\">"; fore
 <?php if($data = $virtualtrader->GetStocks())
 {
 ?>
-<table width="95%" border="0" cellspacing="3" cellpadding="3">
+<table width="100%" border="0" cellspacing="3" cellpadding="3">
 <tr>
-	<td width="40%" height="50"><b>Stock Name :</b></td>
-	<td width="15%"><b>Stock Code :</b></td>
-	<td width="13%"><b>Price :</b></td>
-	<td width="20%"><b>Difference :</b></td>
-	<td width="4%">&nbsp;</td>
+	<td height="50"><b>Stock Name :</b></td>
+	<td><b>Stock Code :</b></td>
+	<td><b>Price :</b></td>
+	<td><b>Difference :</b></td>
+	<td></td>
 </tr>
 <?php foreach($data as $table)
 { ?>

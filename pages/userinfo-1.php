@@ -24,18 +24,17 @@ if(isset($virtualtrader->errormsg)) { echo "<span class=\"errormsg\">"; foreach 
 if(isset($virtualtrader->successmsg)) { echo "<span class=\"successmsg\">"; foreach ($virtualtrader->successmsg as $vsmsg) { echo "$vsmsg<br/>"; } echo "</span><br/>"; }  
 ?>
 Balance : <?php echo $balance; ?> $<br/><br/>
-User shares :
 <?php if($data = $virtualtrader->GetUserStocks($username))
 {
 ?>
-<table width="95%" border="0" cellspacing="3" cellpadding="3">
+<table width="100%" border="0" cellspacing="3" cellpadding="3">
 <tr>
-	<td width="30%" height="50"><b>Stock Name :</b></td>
-	<td width="15%"><b>Stock Code :</b></td>
-	<td width="15%"><b>Previous Price :</b></td>
-	<td width="20%"><b>Current Price :</b></td>
-	<td width="7%"><b>Diff :</b></td>
-	<td width="3%">&nbsp;</td>
+	<td height="50"><b>Stock Name :</b></td>
+	<td><b>Stock Code :</b></td>
+	<td><b>Previous Price :</b></td>
+	<td><b>Current Price :</b></td>
+	<td><b>Difference :</b></td>
+	<td></td>
 </tr>
 <?php foreach($data as $table)
 { ?>
@@ -44,13 +43,13 @@ User shares :
 	<td><?php echo $table['code']; ?></td>
 	<td><?php echo $table['p_price']; ?> $</td>
 	<td><?php echo $table['c_price']; ?> $</td>
-	<td><?php if($table['diff'] > 0) { echo "+"; } echo $table['diff']; ?></td>
+	<td><?php if($table['diff'] > 0) { echo "<img src=\"img/up.png\"/> "; } elseif($table['diff'] < 0) { echo "<img src=\"img/down.png\"/> "; } echo abs($table['diff']); ?></td>
 	<td><a href="?page=stockinfo&code=<?php echo $table['code']; ?>"><img src="img/info.png" /></a></td>
 </tr>
 <?php } ?>
 </table>
 <?php } else { ?>
-0 stocks in database !
+User has 0 shares.
 <?php } ?>
 </div>
 </div>
