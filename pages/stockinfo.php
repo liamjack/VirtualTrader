@@ -67,7 +67,7 @@ if(isset($virtualtrader->successmsg)) { echo "<span class=\"successmsg\">"; fore
 <br/><br/>
 Company Name : <strong><?php echo $stockinfo['name']; ?></strong><br/><br/>
 Share Price : <strong><?php echo $stockinfo['price']; ?>  $</strong><br/>
-Price Difference : <strong><?php if($stockinfo['diff'] > 0) { echo "<img src=\"img/up.png\"/> "; } elseif($stockinfo['diff'] < 0) { echo "<img src=\"img/down.png\"/> "; } echo abs($stockinfo['diff']); ?> (<?php if($stockinfo['diff_perc'] > 0) { echo "+"; } echo $stockinfo['diff_perc']; ?> %)</strong><br/><br/>
+Price Difference : <strong><?php if($stockinfo['diff'] > 0) { echo "<img src=\"img/up.png\"/> "; } elseif($stockinfo['diff'] < 0) { echo "<img src=\"img/down.png\"/> "; } else { echo "<img src=\"img/equal.png\"/> "; } echo abs($stockinfo['diff']); ?> (<?php if($stockinfo['diff_perc'] > 0) { echo "+"; } echo $stockinfo['diff_perc']; ?> %)</strong><br/><br/>
 <?php if($quantity = $virtualtrader->ShareQty($session['username'], $stockinfo['code']))
 {
 	$total = $quantity * $stockinfo['price'];
